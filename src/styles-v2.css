@@ -439,6 +439,10 @@ button, input, select, textarea { font-family: inherit; }
 .reveal { opacity: 0; transform: translateY(28px); transition: all 0.9s var(--ease-luxe); }
 .reveal.in { opacity: 1; transform: translateY(0); }
 .reveal-stagger > * { opacity: 0; transform: translateY(28px); transition: all 0.8s var(--ease-luxe); }
+/* Catch-all so grids longer than the six staggered steps below (logo walls,
+   service cards, long chip lists) still reveal instead of staying invisible.
+   The nth-child rules that follow are more specific and keep their cadence. */
+.reveal-stagger.in > * { opacity: 1; transform: translateY(0); transition-delay: 0.53s; }
 .reveal-stagger.in > *:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 0.05s; }
 .reveal-stagger.in > *:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 0.13s; }
 .reveal-stagger.in > *:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 0.21s; }
@@ -3026,6 +3030,12 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
   background: color-mix(in srgb, var(--pillar-accent) 14%, transparent);
   border: 1px solid color-mix(in srgb, var(--pillar-accent) 30%, transparent);
 }
+/* Font Awesome glyph inside the tile. Sized here rather than on the element so
+   the icon keeps its own optical weight across the different marks. */
+.pillar-value-icon i {
+  font-size: 19px;
+  line-height: 1;
+}
 .pillar-page--rtl .pillar-value-list li {
   flex-direction: row-reverse;
   text-align: right;
@@ -3064,24 +3074,43 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
 .pillar-page--rtl .pillar-works-list li::before { left: auto; right: 22px; }
 
 /* Clients & partners */
-.pillar-clients-grid {
-  display: flex; flex-wrap: wrap; gap: 12px;
+
+/* Logo walls. Each mark sits on a light plate: the supplied artwork mixes
+   transparent PNGs with marks baked onto white, and a plate makes both read
+   consistently on the dark pillar page. Marks are never recoloured. */
+.pillar-org-group + .pillar-org-group { margin-top: 34px; }
+.pillar-org-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(216px, 1fr));
+  gap: 14px;
 }
-.pillar-client-chip {
-  padding: 11px 18px;
+.pillar-org-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 124px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: #fff;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 999px;
-  background: rgba(12, 16, 22, 0.4);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  font-size: 15px;
-  color: rgba(233, 240, 247, 0.82);
-  transition: border-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 6px 26px rgba(0, 0, 0, 0.28);
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
-.pillar-client-chip:hover {
-  border-color: color-mix(in srgb, var(--pillar-accent) 65%, transparent);
-  color: #f4f8fb;
-  transform: translateY(-2px);
+.pillar-org-card:hover {
+  border-color: color-mix(in srgb, var(--pillar-accent) 70%, transparent);
+  box-shadow: 0 10px 34px color-mix(in srgb, var(--pillar-accent) 22%, rgba(0, 0, 0, 0.3));
+  transform: translateY(-3px);
+}
+/* Fill the plate rather than sitting at the artwork's intrinsic size, so wide
+   wordmarks and square marks end up optically similar in weight. */
+.pillar-org-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+@media (max-width: 560px) {
+  .pillar-org-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .pillar-org-card { height: 96px; padding: 13px 15px; }
 }
 
 /* Contact section */
@@ -3125,73 +3154,6 @@ a.pillar-contact-val:hover { color: var(--pillar-accent); }
 
 .pillar-contact-cta-block {
   display: flex; flex-direction: column; align-items: flex-start; gap: 14px;
-}
-
-/* === SYSTEMS PILLAR CUSTOM STYLING - MATCH HOME PAGE === */
-main:has([data-pillar="systems"]) .pillar-service-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
-}
-
-main:has([data-pillar="systems"]) .pillar-service-card {
-  position: relative;
-  padding: 32px;
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--systems-deep) 58%, transparent),
-    color-mix(in srgb, var(--systems) 46%, transparent)
-  );
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 24px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.14),
-    0 20px 50px rgba(0, 0, 0, 0.34),
-    0 6px 34px color-mix(in srgb, var(--systems) 24%, transparent);
-  transition:
-    transform 0.6s var(--ease-luxe),
-    border-color 0.4s ease,
-    box-shadow 0.4s ease;
-  isolation: isolate;
-  color: #ffffff;
-  display: flex;
-  flex-direction: column;
-}
-
-main:has([data-pillar="systems"]) .pillar-service-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(255, 255, 255, 0.32);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    0 28px 64px rgba(0, 0, 0, 0.42),
-    0 0 30px color-mix(in srgb, var(--systems) 40%, transparent);
-}
-
-main:has([data-pillar="systems"]) .pillar-service-num {
-  font-family: var(--font-body);
-  font-size: 20px;
-  opacity: 0.7;
-  margin-bottom: 8px;
-}
-
-main:has([data-pillar="systems"]) .pillar-service-title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  line-height: 1.1;
-  font-size: 28px;
-  color: #ffffff;
-  margin-bottom: 12px;
-}
-
-main:has([data-pillar="systems"]) .pillar-service-body {
-  font-size: 18px;
-  line-height: 1.6;
-  opacity: 0.95;
-  font-weight: 300;
-  color: #ffffff;
-  flex-grow: 1;
 }
 
 @media (max-width: 720px) {

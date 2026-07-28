@@ -1,24 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  Award,
-  Database,
-  Globe,
-  GraduationCap,
-  Handshake,
-  Lightbulb,
-  Network,
-  RefreshCw,
-  Rocket,
-  Server,
-  ShieldCheck,
-  Sparkles,
-  Target,
-  TrendingUp,
-  Trophy,
-  Users,
-  Zap,
-  type LucideIcon,
-} from 'lucide-react';
 import { AwjMarkAnimation } from '../components/AwjMarkAnimation';
 import { PillarMarkAnimation } from '../components/PillarMarkAnimation';
 import { Cursor } from '../components/Cursor';
@@ -28,32 +8,72 @@ import { NavPill } from '../sections/NavPill';
 import { Footer } from '../sections/Footer';
 import { PILLARS, type PillarId } from '../data/pillars';
 import { PILLAR_CONTENT } from '../data/pillar-content';
+import { PILLAR_ORGS, type OrgLogo } from '../data/pillar-partners';
 import { useLang } from '../i18n/LangContext';
 import type { TranslationKey } from '../i18n/dict';
 
-/** Pick a fitting Lucide icon for a value-proposition line by keyword.
- *  Order matters — the first matching rule wins; Sparkles is the fallback. */
-const VALUE_ICON_RULES: [RegExp, LucideIcon][] = [
-  [/ecosystem/i, Network],
-  [/partnership/i, Handshake],
-  [/infrastructure|residency/i, Server],
-  [/compliance|risk|withstand|scrutiny|stability/i, ShieldCheck],
-  [/accredit|program|jobs|labor|labour/i, GraduationCap],
-  [/competitive advantage/i, Trophy],
-  [/talent|expert|consultant|elite|interactive environment/i, Users],
-  [/readiness|future[- ]read/i, Rocket],
-  [/transform|transition/i, RefreshCw],
-  [/data[- ]driven|decision/i, Database],
-  [/reputation|investment|attractiv/i, Award],
-  [/r&d|research|engineered|technical|frontier/i, Lightbulb],
-  [/rapid|delivery|speed/i, Zap],
-  [/economic|developmental|impact|performance|operational|efficiency/i, TrendingUp],
-  [/result|measurable|tangible/i, Target],
-  [/\blocal\b|\bglobal\b/i, Globe],
+/**
+ * Value-proposition icons, as Font Awesome classes served by the CDN
+ * stylesheet already linked in index.html.
+ *
+ * Assigned per line rather than guessed from keywords: the old keyword rules
+ * matched several lines to the same icon (Users three times on Academy,
+ * ShieldCheck twice on Systems). Every line in a pillar gets a distinct icon.
+ */
+const VALUE_ICONS: Record<string, string> = {
+  // Academy
+  'A blend of local expertise and global practices': 'fa-globe',
+  'An elite group of widely experienced experts and consultants': 'fa-user-tie',
+  'A commitment to tangible, measurable results': 'fa-bullseye',
+  'Accredited programs aligned with future jobs and labor-market needs': 'fa-graduation-cap',
+  'An interactive environment combining international expertise and local context': 'fa-comments',
+  'Sustainable strategic partnerships': 'fa-handshake',
+
+  // Innovation
+  'Enabling entities to build sustainable innovation ecosystems': 'fa-diagram-project',
+  'Accelerating the transformation of ideas into actionable projects': 'fa-arrows-rotate',
+  'Enhancing future readiness': 'fa-rocket',
+  "Upgrading national talents' efficiency": 'fa-users-gear',
+  'Achieving tangible economic and developmental impact': 'fa-arrow-trend-up',
+
+  // Sustain
+  'Transforming sustainability into a competitive advantage': 'fa-trophy',
+  'Enhancing compliance and risk management': 'fa-shield-halved',
+  'Improving institutional and operational performance': 'fa-gauge-high',
+  'Supporting data-driven decision making': 'fa-database',
+  'Boosting reputation and investment attractiveness': 'fa-award',
+
+  // Systems
+  'Systems that withstand rigorous scrutiny': 'fa-shield-halved',
+  'Rapid delivery without compromising institutional stability': 'fa-bolt',
+  'Locally engineered national infrastructure that respects digital data residency laws':
+    'fa-server',
+  'A cumulative technical advantage from R&D that puts clients at the frontier of what is possible':
+    'fa-lightbulb',
+};
+
+/** Drawn on for lines not in the map above, and to break any collision, so a
+ *  pillar never shows the same icon twice even if the copy changes. */
+const VALUE_ICON_POOL = [
+  'fa-star',
+  'fa-circle-check',
+  'fa-compass',
+  'fa-gears',
+  'fa-chart-line',
+  'fa-cube',
+  'fa-layer-group',
+  'fa-seedling',
 ];
-const pickValueIcon = (text: string): LucideIcon => {
-  for (const [re, Icon] of VALUE_ICON_RULES) if (re.test(text)) return Icon;
-  return Sparkles;
+
+/** Resolve one icon per line, guaranteeing no repeats within the list. */
+const assignValueIcons = (items: string[]): string[] => {
+  const used = new Set<string>();
+  return items.map((text) => {
+    let icon = VALUE_ICONS[text];
+    if (!icon || used.has(icon)) icon = VALUE_ICON_POOL.find((c) => !used.has(c)) ?? 'fa-star';
+    used.add(icon);
+    return icon;
+  });
 };
 
 /** Split a stat like "6,600+", "95%" or "1st" into a number + trailing text.
@@ -68,6 +88,22 @@ const parseStat = (value: string) => {
   }
   return null;
 };
+
+/** A wall of client or partner logos, each plated on a light card so marks with
+ *  transparent backgrounds and marks baked onto white both read on the dark
+ *  page. The organisation name is the accessible label, not visible text. */
+const OrgWall = ({ title, logos }: { title: string; logos: OrgLogo[] }) => (
+  <div className="pillar-org-group">
+    <h3 className="pillar-group-title">{title}</h3>
+    <div className="pillar-org-grid reveal-stagger">
+      {logos.map((o) => (
+        <div key={o.src} className="pillar-org-card" title={o.name}>
+          <img src={o.src} alt={o.name} loading="lazy" decoding="async" />
+        </div>
+      ))}
+    </div>
+  </div>
+);
 
 /** Count-up + idle pulse number, mirroring the home Stats band behaviour. */
 const PillarStat = ({ value, index }: { value: string; index: number }) => {
@@ -156,6 +192,11 @@ export const PillarPage = ({ pillarId }: { pillarId: PillarId }) => {
   if (!pillar || !content) return null;
 
   const fullName = t(`pillar.${pillarId}.fullName` as TranslationKey);
+
+  // Clients & Partners is a logo wall only. The `clients` text list in
+  // pillar-content is intentionally not rendered here.
+  const orgs = PILLAR_ORGS[pillarId];
+  const valueIcons = assignValueIcons(content.valueProposition ?? []);
 
   return (
     <>
@@ -268,17 +309,14 @@ export const PillarPage = ({ pillarId }: { pillarId: PillarId }) => {
                 <h2 className="pillar-section-title">{t('pillarPage.value')}</h2>
               </div>
               <ul className="pillar-value-list reveal-stagger">
-                {content.valueProposition.map((v) => {
-                  const Icon = pickValueIcon(v);
-                  return (
-                    <li key={v}>
-                      <span className="pillar-value-icon">
-                        <Icon size={22} strokeWidth={1.8} aria-hidden />
-                      </span>
-                      <span>{v}</span>
-                    </li>
-                  );
-                })}
+                {content.valueProposition.map((v, i) => (
+                  <li key={v}>
+                    <span className="pillar-value-icon">
+                      <i className={`fa-solid ${valueIcons[i]}`} aria-hidden="true" />
+                    </span>
+                    <span>{v}</span>
+                  </li>
+                ))}
               </ul>
             </div>
           </section>
@@ -301,19 +339,18 @@ export const PillarPage = ({ pillarId }: { pillarId: PillarId }) => {
         )}
 
         {/* ===== Clients & Partners ===== */}
-        {content.clients && content.clients.length > 0 && (
+        {(orgs.clients?.length || orgs.partners?.length) && (
           <section className="pillar-section pillar-clients reveal">
             <div className="container">
               <div className="pillar-section-head">
                 <h2 className="pillar-section-title">{t('pillarPage.clients')}</h2>
               </div>
-              <div className="pillar-clients-grid reveal-stagger">
-                {content.clients.map((c) => (
-                  <span key={c} className="pillar-client-chip">
-                    {c}
-                  </span>
-                ))}
-              </div>
+              {orgs.clients && orgs.clients.length > 0 && (
+                <OrgWall title={t('pillarPage.clients.clients')} logos={orgs.clients} />
+              )}
+              {orgs.partners && orgs.partners.length > 0 && (
+                <OrgWall title={t('pillarPage.clients.partners')} logos={orgs.partners} />
+              )}
             </div>
           </section>
         )}
