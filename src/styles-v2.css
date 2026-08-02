@@ -2910,6 +2910,50 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
 }
 
 /* Service groups (Sustainability / Projects / Products / R&D ...) */
+/* Core Services claims a full viewport on the pillar pages, so scrolling into
+   it shows that section and nothing else. `min-height` rather than `height`:
+   a pillar with more services than one screen holds grows past the viewport
+   instead of clipping them. `svh` keeps it honest against mobile browser
+   chrome, with `vh` as the fallback for engines that lack it. */
+.pillar-services {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: stretch;
+  /* Clears the fixed nav pill (ends 78px down) now that the heading sits at
+     the top of the section rather than centred in it. Matches the hero. */
+  padding-top: 118px;
+  padding-bottom: 56px;
+}
+/* Tighter than the 44px default, to hand the space to the panels. */
+.pillar-services .pillar-section-head { margin-bottom: 30px; }
+/* Column layout so the heading keeps its natural height and the groups take
+   every remaining pixel of the viewport rather than sitting in a short band
+   with dead space beneath. */
+.pillar-services > .container {
+  width: 100%;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+}
+.pillar-services .pillar-service-groups {
+  flex: 1;
+  display: grid;
+  gap: 20px;
+  align-content: stretch;
+}
+/* Let each group's card grid absorb the extra height so the cards grow to fill
+   the section instead of leaving a gap beneath them. */
+.pillar-services .pillar-service-group {
+  display: flex;
+  flex-direction: column;
+}
+.pillar-services .pillar-service-grid {
+  flex: 1;
+  align-content: stretch;
+}
+
 .pillar-service-group + .pillar-service-group { margin-top: 44px; }
 
 /* Full-bleed photographic backdrop for the Core Services section: one band per
@@ -3045,6 +3089,36 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
 .pillar-services[data-has-backdrop] .pillar-service-card {
   background: rgba(8, 13, 21, 0.62);
   border-color: rgba(255, 255, 255, 0.16);
+}
+
+/* Systems lays its three groups out left to right rather than stacked. The
+   grid gap replaces the stacked margin, and each panel's cards drop to a
+   single column at panel width. */
+.pillar-page[data-pillar="systems"] .pillar-service-groups {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+.pillar-page[data-pillar="systems"] .pillar-service-groups .pillar-service-group + .pillar-service-group {
+  margin-top: 0;
+}
+.pillar-page[data-pillar="systems"] .pillar-service-groups .pillar-service-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (max-width: 1080px) {
+  .pillar-page[data-pillar="systems"] .pillar-service-groups {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+/* One band per group only reads at desktop width, where the groups sit in
+   columns. Once they stack, the first image covers the section on its own. */
+@media (max-width: 1080px) {
+  .pillar-section-band:not(:first-child) { display: none; }
+  .pillar-section-band:not(:only-child) {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
 }
 .pillar-group-title {
   font-family: var(--font-display);
@@ -3293,7 +3367,17 @@ a.pillar-contact-val:hover { color: var(--pillar-accent); }
 
 @media (max-width: 720px) {
   .pillar-section { padding: 80px 0; }
+  /* The rule above also matches .pillar-services and would otherwise undo its
+     nav clearance, putting the heading back under the pill (which ends 64px
+     down at this width). Restated here so the services heading stays clear. */
+  .pillar-services,
+  .pillar-value { padding-top: 104px; padding-bottom: 48px; }
   .pillar-section-head { margin-bottom: 36px; }
+  .pillar-services .pillar-section-head,
+  .pillar-value .pillar-section-head { margin-bottom: 24px; }
+  /* The full-height offset is desktop framing; on a stacked column it would
+     just push the list off the screen. */
+  .pillar-page[data-pillar="innovation"] .pillar-value-list { margin-top: 40px; }
   .pillar-contact-row { grid-template-columns: 1fr; gap: 8px; }
   .pillar-page--rtl .pillar-contact-row { grid-template-columns: 1fr; }
   .pillar-hero-cta-row { gap: 10px; }
