@@ -13,6 +13,45 @@ import { useLang } from '../i18n/LangContext';
 import type { TranslationKey } from '../i18n/dict';
 
 /**
+ * Core-services groups that render as a panel with a photographic backdrop,
+ * keyed by pillar then by the group's index in `coreServices`. The value is
+ * the `data-backdrop` slug the stylesheet keys the image off; groups with no
+ * entry render plain, as they do on the other pillars.
+ *
+ * Indexed rather than keyed on the group heading so the Arabic pages, whose
+ * services sit in a single untitled group, still get a backdrop.
+ */
+const SERVICE_BACKDROPS: Partial<Record<PillarId, Record<number, string>>> = {};
+
+/**
+ * Core Services backdrops that are a looping video rather than still bands.
+ * Muted and inline so browsers allow autoplay; the poster covers the first
+ * paint and is what shows when the visitor prefers reduced motion.
+ */
+const SERVICE_VIDEOS: Partial<Record<PillarId, { src: string; poster: string; slug: string }>> = {
+  systems: {
+    src: '/assets/video/systems-services.mp4',
+    poster: '/assets/video/systems-services.jpg',
+    slug: 'systems-services-poster',
+  },
+  innovation: {
+    src: '/assets/video/innovation-services.mp4',
+    poster: '/assets/video/innovation-services.jpg',
+    slug: 'innovation-services-poster',
+  },
+  sustain: {
+    src: '/assets/video/sustain-services.mp4',
+    poster: '/assets/video/sustain-services.jpg',
+    slug: 'sustain-services-poster',
+  },
+  academy: {
+    src: '/assets/video/academy-services.mp4',
+    poster: '/assets/video/academy-services.jpg',
+    slug: 'academy-services-poster',
+  },
+};
+
+/**
  * Value-proposition icons, as Font Awesome classes served by the CDN
  * stylesheet already linked in index.html.
  *
@@ -198,6 +237,14 @@ export const PillarPage = ({ pillarId }: { pillarId: PillarId }) => {
   const orgs = PILLAR_ORGS[pillarId];
   const valueIcons = assignValueIcons(content.valueProposition ?? []);
 
+  // One backdrop band per core-services group that has an image. Rendered as a
+  // full-bleed layer behind the whole section rather than inside each group, so
+  // the imagery reads as the section's background.
+  const serviceBands = content.coreServices
+    .map((_, gi) => SERVICE_BACKDROPS[pillarId]?.[gi])
+    .filter((slug): slug is string => Boolean(slug));
+  const serviceVideo = SERVICE_VIDEOS[pillarId];
+
   return (
     <>
       <Cursor />
@@ -280,7 +327,37 @@ export const PillarPage = ({ pillarId }: { pillarId: PillarId }) => {
         )}
 
         {/* ===== Core Services ===== */}
-        <section className="pillar-section pillar-services reveal">
+        <section
+          className="pillar-section pillar-services reveal"
+          data-has-backdrop={serviceVideo || serviceBands.length > 0 ? '' : undefined}
+        >
+          {serviceVideo ? (
+            <div className="pillar-section-backdrop" aria-hidden="true">
+              {/* Poster sits underneath so there is never a blank frame before
+                  the video decodes, and it is what remains when the video is
+                  suppressed for reduced motion. */}
+              <div className="pillar-section-band" data-backdrop={serviceVideo.slug} />
+              <video
+                className="pillar-section-video"
+                src={serviceVideo.src}
+                poster={serviceVideo.poster}
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                tabIndex={-1}
+              />
+            </div>
+          ) : (
+            serviceBands.length > 0 && (
+              <div className="pillar-section-backdrop" aria-hidden="true">
+                {serviceBands.map((slug) => (
+                  <div key={slug} className="pillar-section-band" data-backdrop={slug} />
+                ))}
+              </div>
+            )
+          )}
           <div className="container">
             <div className="pillar-section-head">
               <h2 className="pillar-section-title">{t('pillarPage.coreServices')}</h2>

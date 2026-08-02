@@ -2911,6 +2911,122 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
 
 /* Service groups (Sustainability / Projects / Products / R&D ...) */
 .pillar-service-group + .pillar-service-group { margin-top: 44px; }
+
+/* Full-bleed photographic backdrop for the Core Services section: one band per
+   services group, spanning the section edge to edge behind the content rather
+   than boxed into a panel. */
+/* Any pillar section carrying a backdrop needs to be the positioning and
+   stacking context for it. */
+.pillar-section[data-has-backdrop] {
+  position: relative;
+  isolation: isolate;
+}
+/* Black bed, painted behind the media. The media above is masked so it fades
+   out at the top and bottom; this bed is what shows through there, and it fades
+   to transparent at the very edges so the section still meets its neighbours on
+   the page background rather than on a hard black band. */
+.pillar-section[data-has-backdrop]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    #000 9%,
+    #000 91%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+.pillar-section-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: flex;
+  pointer-events: none;
+  /* Fades the imagery out into the black bed beneath. */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 20%,
+    #000 80%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 20%, #000 80%, transparent 100%);
+}
+.pillar-section-band {
+  flex: 1 1 0;
+  min-width: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+/* With more than one band, overlap neighbours and fade their side edges so the
+   joins cross-dissolve rather than butting together on a visible seam. */
+.pillar-section-band:not(:only-child) {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 70px,
+    #000 calc(100% - 70px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 70px,
+    #000 calc(100% - 70px),
+    transparent 100%
+  );
+}
+.pillar-section-band:not(:first-child) { margin-left: -70px; }
+/* Over the bands and under the section content: black ramps that carry the top
+   and bottom edges into the page, then the pillar tint. Ramping to solid black
+   rather than to transparent means the imagery ends on black regardless of what
+   the neighbouring section is painting, so there is no seam to line up. */
+.pillar-section-backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    155deg,
+    color-mix(in srgb, var(--pillar-deep) 46%, transparent) 0%,
+    rgba(4, 10, 20, 0.7) 46%,
+    rgba(4, 10, 20, 0.82) 100%
+  );
+}
+
+/* Looping video backdrop. Sits above the poster band and below the tint. */
+.pillar-section-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pillar-section-video { display: none; }
+}
+.pillar-section-band[data-backdrop="systems-services-poster"] {
+  background-image: url('/assets/video/systems-services.jpg');
+}
+.pillar-section-band[data-backdrop="innovation-services-poster"] {
+  background-image: url('/assets/video/innovation-services.jpg');
+}
+.pillar-section-band[data-backdrop="sustain-services-poster"] {
+  background-image: url('/assets/video/sustain-services.jpg');
+}
+.pillar-section-band[data-backdrop="academy-services-poster"] {
+  background-image: url('/assets/video/academy-services.jpg');
+}
+}
+/* Denser cards so they hold their edge over a photo. */
+.pillar-services[data-has-backdrop] .pillar-service-card {
+  background: rgba(8, 13, 21, 0.62);
+  border-color: rgba(255, 255, 255, 0.16);
+}
 .pillar-group-title {
   font-family: var(--font-display);
   font-size: clamp(20px, 2vw, 26px);
