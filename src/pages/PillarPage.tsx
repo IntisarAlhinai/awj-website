@@ -51,6 +51,13 @@ const SERVICE_VIDEOS: Partial<Record<PillarId, { src: string; poster: string; sl
   },
 };
 
+/** Value Proposition backdrop per pillar, same `data-backdrop` mechanism as the
+ *  services bands. Pillars with no entry render the section plain. */
+const VALUE_BACKDROPS: Partial<Record<PillarId, string>> = {
+  innovation: 'innovation-value',
+};
+
+
 /**
  * Value-proposition icons, as Font Awesome classes served by the CDN
  * stylesheet already linked in index.html.
@@ -380,7 +387,15 @@ export const PillarPage = ({ pillarId }: { pillarId: PillarId }) => {
 
         {/* ===== Value Proposition ===== */}
         {content.valueProposition && content.valueProposition.length > 0 && (
-          <section className="pillar-section pillar-value reveal">
+          <section
+            className="pillar-section pillar-value reveal"
+            data-has-backdrop={VALUE_BACKDROPS[pillarId] ? '' : undefined}
+          >
+            {VALUE_BACKDROPS[pillarId] && (
+              <div className="pillar-section-backdrop" aria-hidden="true">
+                <div className="pillar-section-band" data-backdrop={VALUE_BACKDROPS[pillarId]} />
+              </div>
+            )}
             <div className="container">
               <div className="pillar-section-head">
                 <h2 className="pillar-section-title">{t('pillarPage.value')}</h2>

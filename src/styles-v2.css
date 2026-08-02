@@ -3085,6 +3085,10 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
   background-image: url('/assets/services/innovation/programs.jpg');
   background-position: center 42%;
 }
+.pillar-section-band[data-backdrop="innovation-value"] {
+  background-image: url('/assets/values/innovation/value.jpg');
+  background-position: center 38%;
+}
 /* Denser cards so they hold their edge over a photo. */
 .pillar-services[data-has-backdrop] .pillar-service-card {
   background: rgba(8, 13, 21, 0.62);
@@ -3206,7 +3210,51 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
   text-align: right;
 }
 
-/* Value proposition */
+/* Value proposition. Only claims a full viewport where there is a backdrop to
+   show; a value list is 4 to 6 short lines, so on the pillars without one a
+   full screen was 55 to 75% empty. Those size to their content instead. */
+.pillar-value {
+  display: flex;
+  align-items: stretch;
+  padding-top: 118px;
+  padding-bottom: 56px;
+}
+.pillar-value[data-has-backdrop] {
+  min-height: 100vh;
+  min-height: 100svh;
+}
+.pillar-value > .container {
+  width: 100%;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+}
+.pillar-value .pillar-section-head { margin-bottom: 30px; }
+
+/* Innovation's value cards match its service cards: near-clear fill, no border,
+   no shadow, blur doing the separation, natural height, dropped clear of the
+   heading with the lower backdrop left open. */
+.pillar-page[data-pillar="innovation"] .pillar-value-list {
+  flex: 1;
+  align-content: start;
+  row-gap: 44px;
+  margin-top: 64px;
+}
+.pillar-page[data-pillar="innovation"] .pillar-value-list li {
+  align-items: center;
+  padding: 18px 24px;
+  background: rgba(10, 14, 22, 0.14);
+  border: 0;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: none;
+  line-height: calc(1em + 8px) !important;
+}
+.pillar-page[data-pillar="innovation"] .pillar-value-list li:hover {
+  background: rgba(10, 14, 22, 0.3);
+  transform: translateY(-3px);
+}
+
 .pillar-value-list {
   list-style: none; margin: 0; padding: 0;
   display: grid;
