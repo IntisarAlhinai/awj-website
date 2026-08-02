@@ -3612,6 +3612,90 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
 }
 /* Icon inline with the text, as on the service cards. */
 .pillar-value-list li { align-items: center; }
+
+/* ---- No lone card on the last row ---------------------------------------
+   `auto-fit` picks a column count from available width alone, which regularly
+   strands the last card by itself (5 value points across 4 columns, 7 services
+   across 3, and so on). At widths wide enough to have a choice, the count is
+   pinned and stepped through alternatives until the last row has company.
+
+   `:has(> :last-child:nth-child(Nn + 1))` is true exactly when the item count
+   leaves a remainder of one in an N-column grid. `:not(:only-child)` keeps a
+   genuinely single card from being dragged through the cascade. The Systems
+   service bands are unaffected: their single-column rule is more specific. */
+@media (min-width: 1100px) {
+  .pillar-service-grid,
+  .pillar-value-list,
+  .pillar-works-list,
+  .pillar-impact-notes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  /* Three would strand it, so try four. */
+  .pillar-service-grid:has(> :last-child:not(:only-child):nth-child(3n + 1)),
+  .pillar-value-list:has(> :last-child:not(:only-child):nth-child(3n + 1)),
+  .pillar-works-list:has(> :last-child:not(:only-child):nth-child(3n + 1)),
+  .pillar-impact-notes:has(> :last-child:not(:only-child):nth-child(3n + 1)) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  /* Four strands it as well, so fall back to two. */
+  .pillar-service-grid:has(> :last-child:not(:only-child):nth-child(3n + 1)):has(
+      > :last-child:nth-child(4n + 1)
+    ),
+  .pillar-value-list:has(> :last-child:not(:only-child):nth-child(3n + 1)):has(
+      > :last-child:nth-child(4n + 1)
+    ),
+  .pillar-works-list:has(> :last-child:not(:only-child):nth-child(3n + 1)):has(
+      > :last-child:nth-child(4n + 1)
+    ),
+  .pillar-impact-notes:has(> :last-child:not(:only-child):nth-child(3n + 1)):has(
+      > :last-child:nth-child(4n + 1)
+    ) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* Logo plates are smaller, so they start from five across. */
+  .pillar-org-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .pillar-org-grid:has(> :last-child:not(:only-child):nth-child(5n + 1)) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .pillar-org-grid:has(> :last-child:not(:only-child):nth-child(5n + 1)):has(
+      > :last-child:nth-child(4n + 1)
+    ) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+/* Two columns strand every odd count, so at tablet widths an odd number of
+   cards steps up to three, and a count that both strand steps up to four. */
+@media (min-width: 760px) and (max-width: 1099px) {
+  .pillar-service-grid,
+  .pillar-value-list,
+  .pillar-works-list,
+  .pillar-impact-notes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .pillar-service-grid:has(> :last-child:not(:only-child):nth-child(2n + 1)),
+  .pillar-value-list:has(> :last-child:not(:only-child):nth-child(2n + 1)),
+  .pillar-works-list:has(> :last-child:not(:only-child):nth-child(2n + 1)),
+  .pillar-impact-notes:has(> :last-child:not(:only-child):nth-child(2n + 1)) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  /* Stat cards are short, so two across suits this width; three when an odd
+     count would otherwise strand one. */
+  .pillar-num-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .pillar-num-grid:has(> :last-child:not(:only-child):nth-child(2n + 1)) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .pillar-org-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .pillar-org-grid:has(> :last-child:not(:only-child):nth-child(4n + 1)) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 /* Contact section */
 .pillar-contact { background: transparent; color: var(--paper); }
 .pillar-contact .pillar-section-head .eyebrow {
