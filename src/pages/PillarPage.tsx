@@ -151,6 +151,68 @@ const OrgWall = ({ title, logos }: { title: string; logos: OrgLogo[] }) => (
   </div>
 );
 
+/**
+ * A paragraph that shows its opening lines and expands in place for the rest,
+ * behind a Read more toggle with a chevron.
+ *
+ * The toggle only appears when the text actually overflows its clamp, measured
+ * from the rendered element rather than from a character count, so it stays
+ * correct across viewport widths and translations. Nothing is truncated in the
+ * markup: the full text is always present for search and screen readers.
+ *
+ * Renders a fragment so the caller decides the surrounding element, letting
+ * both the impact cards and the service-card descriptions share it.
+ */
+const ExpandableText = ({ text, className }: { text: string; className?: string }) => {
+  const { t } = useLang();
+  const [open, setOpen] = useState(false);
+  const [overflows, setOverflows] = useState(false);
+  const ref = useRef<HTMLParagraphElement | null>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    // Only meaningful while clamped; expanding makes the two heights equal.
+    const measure = () => {
+      if (!open) setOverflows(el.scrollHeight > el.clientHeight + 2);
+    };
+    measure();
+    // Web fonts change the line count after first paint, and the clamped box
+    // keeps its height throughout, so ResizeObserver alone never re-fires and
+    // text that fit in the fallback font would stay silently truncated.
+    document.fonts?.ready.then(measure).catch(() => {});
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [open]);
+
+  return (
+    <>
+      <p ref={ref} className={[className, open ? '' : 'is-clamped'].filter(Boolean).join(' ')}>
+        {text}
+      </p>
+      {(overflows || open) && (
+        <button
+          type="button"
+          className="pillar-readmore"
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+        >
+          {t(open ? 'pillarPage.showLess' : 'pillarPage.readMore')}
+        </button>
+      )}
+    </>
+  );
+};
+
+/** Impact note: the copy is fixed and can run long (the Jadeer note is 615
+ *  characters), so it collapses to its opening lines. */
+const ImpactCard = ({ text }: { text: string }) => (
+  <div className="pillar-impact-card">
+    <ExpandableText text={text} />
+  </div>
+);
+
 /** Count-up + idle pulse number, mirroring the home Stats band behaviour. */
 const PillarStat = ({ value, index }: { value: string; index: number }) => {
   const parsed = useMemo(() => parseStat(value), [value]);
@@ -323,9 +385,9 @@ export const PillarPage = ({ pillarId }: { pillarId: PillarId }) => {
                 </div>
               )}
               {content.impactNotes && content.impactNotes.length > 0 && (
-                <div className="pillar-impact-notes">
+                <div className="pillar-impact-notes reveal-stagger">
                   {content.impactNotes.map((p, i) => (
-                    <p key={i}>{p}</p>
+                    <ImpactCard key={i} text={p} />
                   ))}
                 </div>
               )}

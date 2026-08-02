@@ -197,6 +197,8 @@ const en = {
   'pillarPage.clients': 'Clients & Partners',
   'pillarPage.clients.clients': 'Clients',
   'pillarPage.clients.partners': 'Partners',
+  'pillarPage.readMore': 'Read more',
+  'pillarPage.showLess': 'Show less',
   'pillarPage.contact': 'Get in touch',
   'pillarPage.cta': 'Visit',
   'pillarPage.contact.email': 'Email',

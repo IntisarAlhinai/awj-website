@@ -3190,24 +3190,103 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
   font-size: 15px;
   color: rgba(231, 238, 245, 0.68);
 }
+/* Impact notes sit in cards alongside the stat cards rather than as loose
+   prose, so the whole band reads as one set of cards. */
 .pillar-impact-notes {
-  max-width: 900px;
   display: grid;
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  /* Expanding one card must not stretch its neighbour. */
+  align-items: start;
 }
-.pillar-impact-notes p {
+.pillar-impact-card {
+  position: relative;
+  padding: 16px 22px 16px 26px;
+  background: rgba(12, 16, 22, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    0 14px 36px rgba(0, 0, 0, 0.28),
+    0 6px 30px color-mix(in srgb, var(--pillar-accent) 12%, transparent);
+  transition: border-color 0.3s ease, transform 0.4s var(--ease-out);
+}
+.pillar-impact-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 16px;
+  bottom: 16px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: color-mix(in srgb, var(--pillar-accent) 70%, transparent);
+}
+.pillar-impact-card:hover {
+  border-color: color-mix(in srgb, var(--pillar-accent) 50%, transparent);
+  transform: translateY(-3px);
+}
+.pillar-impact-card p {
   margin: 0;
-  padding-left: 20px;
-  border-left: 2px solid color-mix(in srgb, var(--pillar-accent) 55%, transparent);
-  font-size: 17px;
-  line-height: 1.7;
-  color: rgba(233, 240, 247, 0.78);
+  font-size: 16px;
+  color: rgba(233, 240, 247, 0.82);
+  /* The global rule at the top of this file pins line-height to
+     calc(1em + 2px) !important, which is near-solid leading. That reads fine
+     for labels and headings but not for a 600-character paragraph, so this is a
+     deliberate local exception: same font-size + offset formula, wider offset.
+     !important is required only because the global rule uses it. */
+  line-height: calc(1em + 10px) !important;
 }
-.pillar-page--rtl .pillar-impact-notes p {
-  padding-left: 0; padding-right: 20px;
-  border-left: none;
-  border-right: 2px solid color-mix(in srgb, var(--pillar-accent) 50%, transparent);
+/* Collapsed state. The full text stays in the DOM; only the display is capped,
+   so search and assistive tech still get the whole note. */
+.is-clamped {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+.pillar-readmore {
+  margin-top: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pillar-accent);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.2s ease;
+}
+.pillar-readmore::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-right: 1.6px solid currentColor;
+  border-bottom: 1.6px solid currentColor;
+  transform: rotate(45deg) translateY(-1px);
+  transition: transform 0.25s ease;
+}
+.pillar-readmore[aria-expanded='true']::after {
+  transform: rotate(225deg) translateY(-1px);
+}
+.pillar-readmore:hover { opacity: 0.75; }
+.pillar-readmore:focus-visible {
+  outline: 2px solid var(--pillar-accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+.pillar-page--rtl .pillar-impact-card {
+  padding: 16px 26px 16px 22px;
   text-align: right;
+}
+.pillar-page--rtl .pillar-impact-card::before {
+  left: auto;
+  right: 0;
+  border-radius: 3px 0 0 3px;
 }
 
 /* Value proposition. Only claims a full viewport where there is a backdrop to
