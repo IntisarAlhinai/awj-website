@@ -57,6 +57,53 @@ const VALUE_BACKDROPS: Partial<Record<PillarId, string>> = {
   innovation: 'innovation-value',
 };
 
+/**
+ * Core-service icons, as Font Awesome classes from the CDN stylesheet linked in
+ * index.html. Keyed by the exact service name, so only the services listed here
+ * show an icon and every one is distinct within its pillar.
+ */
+const SERVICE_ICONS: Record<string, string> = {
+  // Innovation
+  'Designing and managing innovative programs': 'fa-pen-ruler',
+  'Transferring and localizing science, knowledge, and technology': 'fa-right-left',
+  'Operating incubators and accelerators': 'fa-rocket',
+  'Developing technology transfer offices': 'fa-building',
+  'Organizing hackathons and challenges': 'fa-laptop-code',
+  'Building national capacities': 'fa-people-group',
+  'Strategic consulting': 'fa-chess-knight',
+  'Intellectual property management': 'fa-copyright',
+  'Developing corporate innovation ecosystems': 'fa-network-wired',
+
+  // Systems
+  Advise: 'fa-compass',
+  Build: 'fa-code',
+  Augment: 'fa-robot',
+  'Venture Builder': 'fa-seedling',
+  'Product Portfolio': 'fa-layer-group',
+  'Advanced Research': 'fa-microscope',
+  Commercialization: 'fa-money-bill-trend-up',
+
+  // Sustain
+  'Sustainability Strategy & Consulting': 'fa-leaf',
+  'CSR Impact Measurement & Evaluation': 'fa-hand-holding-heart',
+  'AI & Sustainability Data Tools': 'fa-brain',
+  'Sustainability Reporting & Disclosure': 'fa-file-contract',
+  'Renewable Energy & Climate Strategies': 'fa-solar-panel',
+  'ISO Standards & International Certification': 'fa-certificate',
+  'Sustainability Training & Capability Building': 'fa-chalkboard-user',
+  'Change Management & Professional Accreditation': 'fa-arrows-spin',
+  'Strategic Performance & Continuous Improvement': 'fa-gauge-simple-high',
+  'Leadership Development & Executive Training': 'fa-user-tie',
+  'Risk Management & Governance Frameworks': 'fa-scale-balanced',
+  'Lean Six Sigma & Kaizen': 'fa-recycle',
+  'Corporate Culture Assessment': 'fa-building-flag',
+
+  // Academy
+  'Training Programs': 'fa-person-chalkboard',
+  'Knowledge Services': 'fa-book-open',
+  'Scientific Events': 'fa-calendar-days',
+  'Consulting Services': 'fa-clipboard-list',
+};
 
 /**
  * Value-proposition icons, as Font Awesome classes served by the CDN
@@ -431,19 +478,26 @@ export const PillarPage = ({ pillarId }: { pillarId: PillarId }) => {
             <div className="pillar-section-head">
               <h2 className="pillar-section-title">{t('pillarPage.coreServices')}</h2>
             </div>
-            {content.coreServices.map((group, gi) => (
-              <div key={group.group ?? gi} className="pillar-service-group">
-                {group.group && <h3 className="pillar-group-title">{group.group}</h3>}
-                <div className="pillar-service-grid reveal-stagger">
-                  {group.items.map((it) => (
-                    <div key={it.name} className="pillar-service-card">
-                      <h4 className="pillar-service-title">{it.name}</h4>
-                      {it.desc && <p className="pillar-service-body">{it.desc}</p>}
-                    </div>
-                  ))}
+            <div className="pillar-service-groups">
+              {content.coreServices.map((group, gi) => (
+                <div key={group.group ?? gi} className="pillar-service-group">
+                  {group.group && <h3 className="pillar-group-title">{group.group}</h3>}
+                  <div className="pillar-service-grid reveal-stagger">
+                    {group.items.map((it) => (
+                      <div key={it.name} className="pillar-service-card">
+                        {SERVICE_ICONS[it.name] && (
+                          <span className="pillar-service-icon">
+                            <i className={`fa-solid ${SERVICE_ICONS[it.name]}`} aria-hidden="true" />
+                          </span>
+                        )}
+                        <h4 className="pillar-service-title">{it.name}</h4>
+                        {it.desc && <ExpandableText text={it.desc} className="pillar-service-body" />}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </section>
 

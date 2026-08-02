@@ -2880,6 +2880,28 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
   letter-spacing: 0.1em;
   margin-bottom: 8px;
 }
+/* Service-card icon tile, matching the value-proposition treatment. Font
+   Awesome glyph from the CDN; sized on the <i> so each mark keeps its own
+   optical weight. */
+.pillar-service-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  color: var(--pillar-accent);
+  background: color-mix(in srgb, var(--pillar-accent) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--pillar-accent) 32%, transparent);
+  margin-bottom: 0;
+}
+.pillar-service-icon i {
+  font-size: 18px;
+  line-height: 1;
+}
+.pillar-page--rtl .pillar-service-icon { align-self: flex-end; }
+
 .pillar-service-title {
   font-family: var(--font-display);
   font-size: clamp(18px, 1.8vw, 24px);
@@ -3093,6 +3115,117 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
 .pillar-services[data-has-backdrop] .pillar-service-card {
   background: rgba(8, 13, 21, 0.62);
   border-color: rgba(255, 255, 255, 0.16);
+}
+
+/* Innovation service cards: icon sits inline with the title, the card keeps a
+   compact height, and the fill is light enough to read the backdrop photo
+   through it. Scoped to this pillar; Systems keeps its stacked cards. */
+.pillar-page[data-pillar="innovation"] .pillar-service-card {
+  flex-direction: row;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 24px;
+  background: rgba(10, 14, 22, 0.14);
+  border: 0;
+  /* With no border and a near-clear fill, the blur is what separates the card
+     from the photo: it knocks back the detail behind the text without
+     darkening the card. */
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: none;
+}
+.pillar-page[data-pillar="innovation"] .pillar-service-card:hover {
+  background: rgba(10, 14, 22, 0.3);
+  border: 0;
+  box-shadow: none;
+  transform: translateY(-3px);
+}
+.pillar-page[data-pillar="innovation"] .pillar-service-icon { margin-bottom: 0; }
+.pillar-page[data-pillar="innovation"] .pillar-service-title {
+  font-size: 19px;
+  line-height: 1.35;
+}
+/* Cards stay their natural height and the rows sit on a fixed rhythm from the
+   top, leaving the lower part of the backdrop clear rather than stretching the
+   cards or flinging the rows to the section edges. */
+.pillar-page[data-pillar="innovation"] .pillar-services .pillar-service-grid {
+  align-content: start;
+  row-gap: 44px;
+  /* Drops the whole set clear of the section heading. */
+  margin-top: 168px;
+}
+.pillar-page--rtl[data-pillar="innovation"] .pillar-service-card {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+/* Systems and Sustain share a card shape: icon, title, and a description under
+   it. Same glass treatment as Innovation (near-clear fill, no border, no
+   shadow, blur doing the separation from the video), but laid out on a grid so
+   the icon sits inline with the title while the description takes its own row,
+   aligned to the title rather than the card edge. */
+.pillar-page[data-pillar="systems"] .pillar-service-card,
+.pillar-page[data-pillar="sustain"] .pillar-service-card,
+.pillar-page[data-pillar="academy"] .pillar-service-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    'icon title'
+    '.    body'
+    '.    more';
+  align-items: center;
+  column-gap: 14px;
+  row-gap: 5px;
+  padding: 15px 20px;
+  background: rgba(10, 14, 22, 0.14);
+  border: 0;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: none;
+}
+.pillar-page[data-pillar="systems"] .pillar-service-card:hover,
+.pillar-page[data-pillar="sustain"] .pillar-service-card:hover,
+.pillar-page[data-pillar="academy"] .pillar-service-card:hover {
+  background: rgba(10, 14, 22, 0.3);
+  border: 0;
+  box-shadow: none;
+  transform: translateY(-3px);
+}
+/* Cards take their natural height and sit below the category title, leaving the
+   lower part of each band clear, as on Innovation. */
+.pillar-page[data-pillar="systems"] .pillar-services .pillar-service-grid,
+.pillar-page[data-pillar="sustain"] .pillar-services .pillar-service-grid,
+.pillar-page[data-pillar="academy"] .pillar-services .pillar-service-grid {
+  align-content: start;
+  row-gap: 16px;
+  margin-top: 34px;
+}
+.pillar-page[data-pillar="systems"] .pillar-service-icon,
+.pillar-page[data-pillar="sustain"] .pillar-service-icon,
+.pillar-page[data-pillar="academy"] .pillar-service-icon {
+  grid-area: icon;
+  margin-bottom: 0;
+}
+.pillar-page[data-pillar="systems"] .pillar-service-title,
+.pillar-page[data-pillar="sustain"] .pillar-service-title,
+.pillar-page[data-pillar="academy"] .pillar-service-title { grid-area: title; }
+/* Descriptions are the smallest text on the page and sit over video, so they
+   get the same looser leading exception as the impact notes. See the global
+   line-height rule at the top of this file. */
+.pillar-page[data-pillar="systems"] .pillar-service-body,
+.pillar-page[data-pillar="sustain"] .pillar-service-body,
+.pillar-page[data-pillar="academy"] .pillar-service-body {
+  grid-area: body;
+  line-height: calc(1em + 8px) !important;
+}
+/* The Read more toggle sits under the description, on the title's left edge. */
+.pillar-page[data-pillar="systems"] .pillar-service-card > .pillar-readmore,
+.pillar-page[data-pillar="sustain"] .pillar-service-card > .pillar-readmore,
+.pillar-page[data-pillar="academy"] .pillar-service-card > .pillar-readmore {
+  grid-area: more;
+  justify-self: start;
+  margin-top: 0;
+  font-size: 13px;
 }
 
 /* Systems lays its three groups out left to right rather than stacked. The
