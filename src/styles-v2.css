@@ -3582,6 +3582,36 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
   .pillar-org-card { height: 96px; padding: 13px 15px; }
 }
 
+/* ---- Shared card surface -------------------------------------------------
+   One glass treatment for every card across the pillar sections, matching the
+   Core Services cards: near-clear fill, no border, no shadow, blur doing the
+   separation from whatever is behind. Declared after the individual card rules
+   so it supersedes their older bordered look.
+
+   The client and partner logo plates are deliberately excluded: those need an
+   opaque light background or the supplied marks stop reading. */
+.pillar-num-card,
+.pillar-impact-card,
+.pillar-works-list li,
+.pillar-value-list li,
+.pillar-service-card {
+  background: rgba(10, 14, 22, 0.14);
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.pillar-num-card:hover,
+.pillar-impact-card:hover,
+.pillar-works-list li:hover,
+.pillar-value-list li:hover,
+.pillar-service-card:hover {
+  background: rgba(10, 14, 22, 0.3);
+  border: 0;
+  box-shadow: none;
+}
+/* Icon inline with the text, as on the service cards. */
+.pillar-value-list li { align-items: center; }
 /* Contact section */
 .pillar-contact { background: transparent; color: var(--paper); }
 .pillar-contact .pillar-section-head .eyebrow {
