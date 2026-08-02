@@ -3021,6 +3021,25 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
 .pillar-section-band[data-backdrop="academy-services-poster"] {
   background-image: url('/assets/video/academy-services.jpg');
 }
+
+/* Kept deliberately: SERVICE_BACKDROPS is empty since videos took over Core
+   Services, so nothing requests these slugs today. Retained with their assets
+   for reuse rather than deleted. */
+.pillar-section-band[data-backdrop="systems-projects"] {
+  background-image: url('/assets/services/systems/projects.jpg');
+}
+.pillar-section-band[data-backdrop="systems-products"] {
+  background-image: url('/assets/services/systems/products.jpg');
+}
+/* This source is a small portrait frame, so `cover` crops it hard. Anchoring
+   right keeps the laptop and its holographic overlay in view. */
+.pillar-section-band[data-backdrop="systems-rnd"] {
+  background-image: url('/assets/services/systems/research-development.jpg');
+  background-position: right 32%;
+}
+.pillar-section-band[data-backdrop="innovation-programs"] {
+  background-image: url('/assets/services/innovation/programs.jpg');
+  background-position: center 42%;
 }
 /* Denser cards so they hold their edge over a photo. */
 .pillar-services[data-has-backdrop] .pillar-service-card {
