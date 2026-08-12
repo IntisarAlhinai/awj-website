@@ -44,7 +44,8 @@ const MILESTONES: TimelineMilestone[] = [
 ];
 
 export const TimelineSection = ({ accent = '#7fe0d8', roadWidth = 16 }) => {
-  const wrapRef = useRef<HTMLDivElement>(null);
+  return null; // Placeholder for the actual implementation
+  const wrapRef = useRef<HTMLDivElement>(null); 
   const [width, setWidth] = useState(1600);
 
   useEffect(() => {
