@@ -1163,7 +1163,7 @@ button, input, select, textarea { font-family: inherit; }
   --accent-glow: rgba(12, 14, 20, 0.18);
   position: relative;
   padding: 28px 28px 26px;
-  display: flex; flex-direction: column-reverse; gap: 18px;
+  display: flex; flex-direction: column; gap: 18px;
   align-items: flex-start;
   /* Dark glass, matching the timeline cards (.timeline-card). */
   border: 1.5px solid rgba(255, 255, 255, 0.18);
@@ -1191,7 +1191,7 @@ button, input, select, textarea { font-family: inherit; }
   font-family: var(--font-body); font-size: 20px; font-weight: 500;
   color: rgba(231, 238, 245, 0.72);
   padding: 0;
-  order: 1;
+  order: 2;
   margin-bottom: 12px;
 }
 /* Win over the later bare `.stat-label` rule (dark ink) so labels stay light
@@ -1207,7 +1207,7 @@ button, input, select, textarea { font-family: inherit; }
   padding: 0;
   font-feature-settings: "tnum" 1, "lnum" 1;
   text-align: left;
-  order: 2;
+  order: 1;
 }
 .stat-col .num .suffix {
   font-size: 0.5em; font-weight: 400;
@@ -1336,6 +1336,8 @@ button, input, select, textarea { font-family: inherit; }
   position: relative; z-index: 1; padding: 36px 32px; display: flex; flex-direction: column; justify-content: flex-start; flex: 1;
 }
 .stack-card .desc { font-size: 20px; line-height: 1.55; opacity: 0.85; font-weight: 300; margin-top: 0; }
+.stack-card .desc-name { display: block; font-weight: 700; opacity: 1; }
+.stack-card .desc-quote { display: block; margin-top: 6px; }
 .stack-card .meta-row .m-k { font-family: var(--font-body); font-size: 20px; ; opacity: 0.9; }
 .stack-card .meta-row .m-v { font-size: 20px; font-weight: 500; margin-top: 4px; }
 

@@ -35,6 +35,14 @@ export const LangProvider = ({ children }: { children: ReactNode }) => {
     const html = document.documentElement;
     html.lang = lang;
     html.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    // index.html carries the English title/description for crawlers; swap them
+    // whenever the reader switches language.
+    document.title = DICT[lang]['meta.title'] ?? DICT.en['meta.title'] ?? 'AWJ';
+    const desc = document.querySelector('meta[name="description"]');
+    if (desc) {
+      const next = DICT[lang]['meta.description'] ?? DICT.en['meta.description'];
+      if (next) desc.setAttribute('content', next);
+    }
     try {
       window.localStorage.setItem(STORAGE_KEY, lang);
     } catch {

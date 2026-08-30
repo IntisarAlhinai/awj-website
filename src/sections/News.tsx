@@ -1,8 +1,8 @@
-import { NEWS } from '../data/news';
+import { NEWS, newsCategory, newsDate, newsPillar, newsTitle } from '../data/news';
 import { useLang } from '../i18n/LangContext';
 
 export const News = () => {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const featured = NEWS.filter((n) => n.featured).slice(0, 2);
   const recent = NEWS.filter((n) => !n.featured).slice(0, 4);
 
@@ -33,16 +33,16 @@ export const News = () => {
           {featured.map((n) => (
             <a key={n.id} className="news-feature-card" href={`/news#${n.id}`}>
               <div className="nfc-cover">
-                <img className="news-cover-img" src={n.image} alt={n.title} loading="lazy" />
-                <div className="nfc-tag">{n.category}</div>
+                <img className="news-cover-img" src={n.image} alt="" aria-hidden="true" loading="lazy" />
+                <div className="nfc-tag">{newsCategory(n.category, lang)}</div>
               </div>
               <div className="nfc-body">
                 <div className="nfc-meta">
-                  <span>{n.dateLabel}</span>
+                  <span>{newsDate(n, lang)}</span>
                   <span className="dot">·</span>
-                  <span>{n.pillar}</span>
+                  <span>{newsPillar(n.pillar, lang)}</span>
                 </div>
-                <h3 className="nfc-title">{n.title}</h3>
+                <h3 className="nfc-title">{newsTitle(n, lang)}</h3>
                 <p className="nfc-dek">{n.dek}</p>
                 <span className="nfc-read">
                   {t('news.readStory')}
@@ -72,11 +72,11 @@ export const News = () => {
             {recent.map((n) => (
               <li key={n.id} className="news-recent-item">
                 <a href={`/news#${n.id}`}>
-                  <span className="nri-date">{n.dateLabel}</span>
+                  <span className="nri-date">{newsDate(n, lang)}</span>
                   <span className="nri-cat" data-cat={n.category}>
-                    {n.category}
+                    {newsCategory(n.category, lang)}
                   </span>
-                  <span className="nri-title">{n.title}</span>
+                  <span className="nri-title">{newsTitle(n, lang)}</span>
                   <span className="nri-arrow">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                       <path

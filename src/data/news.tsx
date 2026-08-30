@@ -1,3 +1,5 @@
+import { DICT, type Lang, type TranslationKey } from '../i18n/dict';
+
 export type NewsCategory =
   | 'Healthcare'
   | 'Digital Transformation'
@@ -12,6 +14,8 @@ export type NewsItem = {
   id: string;
   category: NewsCategory;
   title: string;
+  /** Item 31: approved Arabic headline, where one exists. */
+  titleAr?: string;
   date: string;
   dateLabel: string;
   pillar: string;
@@ -28,6 +32,8 @@ export const NEWS: NewsItem[] = [
     category: 'Healthcare',
     title:
       'AWJ Innovation and Sultan Qaboos Hospital Launch Healthcare Innovation Studio',
+    titleAr:
+      'أوج الابتكار ومستشفى السلطان قابوس يُطلقان استوديو الابتكار الصحّي',
     date: '2024-11-03',
     dateLabel: 'Nov 03, 2024',
     pillar: 'AWJ Innovation',
@@ -503,4 +509,41 @@ export const NewsCover = ({ category }: CoverProps) => {
       {renderArt()}
     </svg>
   );
+};
+
+// ---- Arabic presentation (see content notes 30-34) ----------------------
+
+/** Item 32: only these five categories have approved Arabic; the rest stay English. */
+const CATEGORY_AR: Partial<Record<NewsCategory, string>> = {
+  'Healthcare': 'الصحّة',
+  'Digital Transformation': 'التحوّل الرقمي',
+  'Social Responsibility': 'المسؤولية الاجتماعية',
+  'Logistics': 'اللوجستيات',
+  'Aviation': 'الطيران',
+};
+
+const PILLAR_KEY: Record<string, TranslationKey> = {
+  'AWJ Innovation': 'pillar.innovation.fullName',
+  'AWJ Academy': 'pillar.academy.fullName',
+};
+
+const AR_MONTHS = [
+  'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
+  'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر',
+];
+
+export const newsTitle = (n: NewsItem, lang: Lang) =>
+  (lang === 'ar' && n.titleAr) || n.title;
+
+export const newsCategory = (c: NewsCategory, lang: Lang) =>
+  (lang === 'ar' && CATEGORY_AR[c]) || c;
+
+export const newsPillar = (p: string, lang: Lang) =>
+  (lang === 'ar' && PILLAR_KEY[p] && DICT.ar[PILLAR_KEY[p]]) || p;
+
+/** Item 30: derived from the ISO `date` so every article is covered, not just the listed five. */
+export const newsDate = (n: NewsItem, lang: Lang) => {
+  if (lang !== 'ar') return n.dateLabel;
+  const [y, m, day] = n.date.split('-').map(Number);
+  return `${day} ${AR_MONTHS[m - 1]} ${y}`;
 };

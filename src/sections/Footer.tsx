@@ -11,7 +11,7 @@ export const Footer = () => {
             <div className="wordmark footer-wordmark">
               <img
                 src="/assets/brand/awj-logo-v.svg"
-                alt="AWJ"
+                alt={t('brand.logoAlt')}
                 className="footer-awj-logo"
               />
             </div>
@@ -78,10 +78,10 @@ export const Footer = () => {
           </div>
           <div className="footer-col">
             <h4>{t('footer.col.pillars')}</h4>
-            <a href="/pillars/academy">AWJ Academy</a>
-            <a href="/pillars/sustain">AWJ Sustain</a>
-            <a href="/pillars/innovation">AWJ Innovation</a>
-            <a href="/pillars/systems">AWJ Systems</a>
+            <a href="/pillars/innovation">{t('pillar.innovation.fullName')}</a>
+            <a href="/pillars/sustain">{t('pillar.sustain.fullName')}</a>
+            <a href="/pillars/systems">{t('pillar.systems.fullName')}</a>
+            <a href="/pillars/academy">{t('pillar.academy.fullName')}</a>
           </div>
           <div className="footer-col">
             <div className="footer-col-header">

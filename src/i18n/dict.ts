@@ -20,6 +20,7 @@ const en = {
   'nav.openMenu': 'Open menu',
   'nav.closeMenu': 'Close menu',
   'nav.pillarsEyebrow': 'Four pillars · one group',
+  'brand.logoAlt': 'AWJ',
 
   // Hero
   'hero.eyebrow': 'Sustainable Innovation and Technologies Development Company (AWJ)',
@@ -27,7 +28,7 @@ const en = {
   'hero.title.line2': 'a Sustainable',
   'hero.title.line3': 'Future',
   'hero.lede':
-    'The greatest challenges of our world are not solved by resources alone. They are solved by the capacity to innovate. When knowledge meets technology and people, ideas become reality and opportunities become lasting impact.',
+    'We work with government, academic, and industrial institutions to build innovation ecosystems and develop capability: 50 projects delivered and 25 strategic partners over ten years. By connecting science, technology, and innovation to practical application, we help our partners achieve sustainable growth and create long-term value.',
   'hero.cta.primary': 'Get in touch',
   'hero.cta.secondary': 'Explore the group',
   'hero.chips.label': 'Pillars',
@@ -45,8 +46,7 @@ const en = {
   // Pillars stack
   'pillars.title.first': 'AWJ',
   'pillars.title.second': 'Pillars',
-  'pillars.intro':
-    'AWJ Corporate operates through four pillars: AWJ Academy develops people and institutions, AWJ Sustain drives sustainability transformation, AWJ Innovation enables talent, capability, and digital transformation, and AWJ Systems integrates infrastructure, digital backbone, and operational technology.',
+  'pillars.intro': 'Four specialized pillars working together to deliver integrated solutions that drive sustainable growth: AWJ Innovation for building the ecosystems that turn an idea into a venture with economic impact; AWJ Sustain for sustainability, business development, governance, and corporate social responsibility; AWJ Systems for designing and operating digital platforms and the systems that run programs, incubators, and hackathons; and AWJ Academy for programs that build innovation capability, future skills, and technology entrepreneurship.',
   'pillars.prev': 'Previous',
   'pillars.next': 'Next',
   'pillars.label': 'PILLAR',
@@ -57,14 +57,10 @@ const en = {
   'pillar.innovation.fullName': 'AWJ Innovation',
   'pillar.systems.fullName': 'AWJ Systems',
   // Per-pillar descriptions used in the carousel
-  'pillar.academy.desc':
-    'The human capital and professional development arm, specializing in designing and implementing learning and professional development programs that empower individuals and institutions to lead innovation, enhance competitiveness, and meet future demands.',
-  'pillar.sustain.desc':
-    'Strategic partner in sustainability and institutional excellence specialising in environmental, social and governance (ESG) strategies and impact management to enable organizations to achieve responsible growth and lasting value for business and society.',
-  'pillar.innovation.desc':
-    'A specialized arm for designing and managing innovation ecosystems, research & development, and technology transfer, converting ideas and emerging opportunities into solutions, products, and services with lasting impact and sustainable value.',
-  'pillar.systems.desc':
-    'A center of excellence in future technologies, specializing in data, artificial intelligence, quantum computing, and emerging technologies, developing intelligent solutions and systems that support innovation, institutional transformation, and decision-making.',
+  'pillar.academy.desc': 'AWJ Academy: We turn knowledge into a capability people practice in their work.',
+  'pillar.sustain.desc': 'AWJ Sustain: We make commitment measurable and governance practical.',
+  'pillar.innovation.desc': 'AWJ Innovation: We build the ecosystems that turn an idea into a venture with economic impact.',
+  'pillar.systems.desc': 'AWJ Systems: We design, build, and run the systems until they work in the hands of the user.',
   'pillar.meta.established': 'Established',
   'pillar.meta.reach': 'Reach',
   'pillar.meta.alumni': 'Alumni',
@@ -133,7 +129,7 @@ const en = {
   'contact.step4': 'Ready to send',
   'contact.field.name': 'Full name',
   'contact.field.email': 'Email',
-  'contact.field.org': 'Organisation (optional)',
+  'contact.field.org': 'Organization (optional)',
   'contact.field.message': 'Briefly, what would you like to discuss?',
   'contact.area.advisory': 'Strategic advisory',
   'contact.area.advisory.sub': 'Group-level mandates',
@@ -155,7 +151,7 @@ const en = {
   'contact.summary.area': 'Area',
   'contact.summary.name': 'Name',
   'contact.summary.email': 'Email',
-  'contact.summary.org': 'Organisation',
+  'contact.summary.org': 'Organization',
   'contact.summary.dash': '-',
   'contact.back': 'Back',
   'contact.continue': 'Continue',
@@ -182,7 +178,7 @@ const en = {
   'footer.col.connect.careers': 'Careers',
   'footer.col.connect.press': 'Press',
   'footer.col.connect.ir': 'Investor relations',
-  'footer.copyright': '© 2026 AWJ Corporate · All rights reserved',
+  'footer.copyright': '© 2026 AWJ · All rights reserved',
   'footer.cities': 'Riyadh · Dubai · London · Singapore',
 
   // Pillar pages (chrome)
@@ -223,6 +219,10 @@ const en = {
   'newsPage.read': 'Read',
   'newsPage.featuredBadge': 'Featured',
   'newsPage.countOf': 'of',
+
+  // Document metadata, applied by LangProvider
+  'meta.title': 'AWJ | Sustainable Innovation and Technologies Development Company',
+  'meta.description': 'AWJ is an Omani group building innovation ecosystems, developing capability, and enabling sustainability across four pillars and 50 projects delivered.',
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -245,32 +245,32 @@ const ar: Partial<Record<TranslationKey, string>> = {
   'nav.openMenu': 'فتح القائمة',
   'nav.closeMenu': 'إغلاق القائمة',
   'nav.pillarsEyebrow': 'أربعة قطاعات · مجموعة واحدة',
+  'brand.logoAlt': 'أوج',
 
   // Hero
   // Approved company name (content/approved-content-ar.md → شريحة الغلاف).
   'hero.eyebrow': 'شركة تنمية الابتكار والتقنيات المستدامة (أوج)',
-  // Arabic hero title (user-provided): "نبتكر مستقبلاً مستداماً" — split across
+  // Arabic hero title (user-provided): "نبتكر مستقبلًا مستدامًا" — split across
   // the three headline lines so none fall back to English.
   'hero.title.line1': 'نبتكر',
-  'hero.title.line2': 'مستقبلاً',
-  'hero.title.line3': 'مستداماً',
+  'hero.title.line2': 'مستقبلًا',
+  'hero.title.line3': 'مستدامًا',
   'hero.lede':
-    'نعمل مع المؤسسات الحكومية والأكاديمية والصناعية لبناء منظومات الابتكار، وتطوير القدرات، وتسريع التحول المؤسسي، وتمكين الاستدامة. ومن خلال ربط العلوم والتكنولوجيا والابتكار بالتطبيق العملي، نساعد شركاءنا على تحقيق نمو مستدام وخلق قيمة طويلة الأمد.',
+    'نعمل مع المؤسسات الحكومية والأكاديمية والصناعية على بناء منظومات الابتكار وتطوير القدرات: خمسون مشروعًا منجزًا، وخمسةٌ وعشرون شريكًا استراتيجيًّا في عشر سنوات. وبربط العلوم والتقنية والابتكار بالتطبيق العملي، نساعد شركاءنا على تحقيق نمو مستدام وخلق قيمة طويلة الأمد.',
   'hero.cta.primary': 'تواصل معنا',
   'hero.cta.secondary': 'استكشف المجموعة',
   'hero.chips.label': 'القطاعات',
 
   // Stats (labels kept; descriptions need approved Arabic → English fallback)
-  'stats.projects.label': 'مشروع منجز',
-  'stats.professionals.label': 'مهني تم تدريبه',
-  'stats.partners.label': 'شريك استراتيجي',
-  'stats.experience.label': 'سنة خبرة مجتمعة',
+  'stats.projects.label': 'مشروعًا منجزًا',
+  'stats.professionals.label': 'مهنيّ دَرَّبناهم',
+  'stats.partners.label': 'شريكًا استراتيجيًّا',
+  'stats.experience.label': 'عشر سنوات خبرة مجتمعة',
 
   // Pillars stack
   'pillars.title.first': 'قطاعات',
   'pillars.title.second': 'أوج',
-  'pillars.intro':
-    'أربعة قطاعات متخصصة\nتعمل معاً لتقديم حلول متكاملة\nتحقق نمواً مستداماً.',
+  'pillars.intro': 'أربعة قطاعات متخصّصة تعمل معًا لتقديم حلولٍ متكاملة تحقّق نموًا مستدامًا: أوج الابتكار لبناء المنظومات التي تُحوّل الفكرة إلى مشروعٍ له أثرٌ اقتصادي، وأوج الاستدامة للاستدامة وتطوير الأعمال والحوكمة والمسؤولية الاجتماعية للشركات، وأوج الأنظمة لتصميم وتشغيل المنصات الرقمية وأنظمة إدارة البرامج والحاضنات والهاكاثونات، وأكاديمية أوج لبرامج بناء القدرات الابتكارية ومهارات المستقبل وريادة الأعمال التقنية.',
   'pillars.prev': 'السابق',
   'pillars.next': 'التالي',
   'pillars.label': 'قطاع',
@@ -280,14 +280,10 @@ const ar: Partial<Record<TranslationKey, string>> = {
   'pillar.innovation.fullName': 'أوج الابتكار',
   'pillar.systems.fullName': 'أوج الأنظمة',
   // Pillar definitions — approved «تعريف القطاع» (content/approved-content-ar.md).
-  'pillar.academy.desc':
-    'أكاديمية أوج منصة متكاملة للمعرفة والتدريب والحوار العلمي، تقدّم برامج تعليمية وتدريبية متقدمة وشاملة تلبّي الاحتياجات الفعلية لسوق العمل والمجتمع، مع التركيز على التمكين بالمعارف والمهارات في بيئة تفاعلية تجمع بين الخبرات العالمية والسياق المحلي.',
-  'pillar.sustain.desc':
-    'أوج للاستدامة هي الذراع المتخصص في الاستدامة والتميز المؤسسي ضمن مجموعة أوج، تقدّم حلولاً متكاملة في حوكمة (ESG) والمسؤولية الاجتماعية والتحول المؤسسي المستدام.',
-  'pillar.innovation.desc':
-    'قطاع متخصص في تصميم وتطوير وتشغيل منظومات الابتكار وريادة الأعمال، وتحويل الأفكار والأبحاث إلى مشاريع وشركات ذات أثر اقتصادي وتنموي مستدام.',
-  'pillar.systems.desc':
-    'نصمم ونطوّر ونُكامل الأنظمة البرمجية وحلول الذكاء الاصطناعي الجاهزة للإنتاج لصالح الجهات الحكومية والمؤسسات الكبرى في عُمان ودول الخليج، ونعمل عبر ثلاثة محاور: المشاريع، والمنتجات، والبحث والتطوير.',
+  'pillar.academy.desc': 'أكاديمية أوج: نُحوّل المعرفة إلى قدرةٍ يُمارسها صاحبها في عمله.',
+  'pillar.sustain.desc': 'أوج الاستدامة: نجعل الالتزام قابلًا للقياس، والحوكمة قابلةً للتطبيق.',
+  'pillar.innovation.desc': 'أوج الابتكار: نبني المنظومات التي تُحوّل الفكرة إلى مشروعٍ له أثرٌ اقتصادي.',
+  'pillar.systems.desc': 'أوج الأنظمة: نُصمّم الأنظمة ونبنيها ونُشغّلها حتى تعمل في يد المستخدم.',
   'pillar.meta.established': 'التأسيس',
   'pillar.meta.reach': 'الانتشار',
   'pillar.meta.alumni': 'الخريجون',
@@ -307,9 +303,16 @@ const ar: Partial<Record<TranslationKey, string>> = {
   'pillar.systems.mandates': '+240',
   'pillar.systems.focus': 'تقنية تشغيلية · رقمي',
 
-  // Services bento (title/more kept; card copy needs approved Arabic → English fallback)
+  // Services bento
   'services.title': 'خدماتنا الرئيسية',
   'services.more': 'المزيد من الخدمات',
+  'services.b1.title.line1': 'الاستشارات',
+  'services.b1.title.line2': 'الاستراتيجية',
+  'services.b1.body': 'تصميم نموذج التشغيل، واستراتيجية رأس المال، وبرامج التحوّل على مستوى المجموعة.',
+  'services.b2.title': 'بناء القدرات',
+  'services.b3.title': 'الاستدامة والحوكمة',
+  'services.b4.title': 'منظومات الابتكار',
+  'services.b5.title': 'تقنيات المستقبل والذكاء الاصطناعي',
 
   // Projects
   'projects.eyebrow': 'مشاريع مختارة',
@@ -324,7 +327,7 @@ const ar: Partial<Record<TranslationKey, string>> = {
   'news.viewAll': 'عرض كل الأخبار',
   'news.latest': 'الأحدث',
   'news.allStories': 'كل القصص',
-  'news.readStory': 'اقرأ القصة',
+  'news.readStory': 'اقرأ القصة (بالإنجليزية)',
 
   // Partners
   'partners.eyebrow': 'الشركاء والعملاء',
@@ -334,7 +337,7 @@ const ar: Partial<Record<TranslationKey, string>> = {
 
   // Contact
   'contact.title': 'تواصل معنا',
-  // contact.lede: needs approved Arabic → English fallback.
+  'contact.lede': 'استمارةٌ قصيرة تُوجّه طلبك إلى القطاع والشريك المعنيَّين. نردّ في يومَي عملٍ في الغالب.',
   'contact.callUs': 'أو اتصل بنا مباشرة',
   'contact.step1': 'بأي قطاع أنت مهتم؟',
   'contact.step2': 'ما مجال التعاون؟',
@@ -371,10 +374,11 @@ const ar: Partial<Record<TranslationKey, string>> = {
   'contact.send': 'إرسال الاستفسار',
   'contact.thanks': 'شكراً, سنتواصل قريباً.',
 
-  // Footer (brand.desc needs approved Arabic → English fallback)
+  // Footer
+  'footer.brand.desc': 'مجموعةٌ متكاملة تعمل عبر أوج الابتكار وأوج الاستدامة وأوج الأنظمة وأكاديمية أوج، تبني تقدّمًا راسخًا للقطاعات التي تخدمها.',
   'footer.col.pillars': 'القطاعات',
   'footer.col.location': 'الموقع',
-  'footer.col.address': 'نعمل من ساحة المزون، الطابق الخامس، الخوض، مسقط، سلطنة عمان، متوافقين مع ساعات العمل القياسية في مسقط (من الأحد إلى الخميس).',
+  'footer.col.address': 'نعمل من ساحة المزون، الطابق الخامس، الخوض، مسقط، سلطنة عُمان، متوافقين مع ساعات العمل القياسية في مسقط (من الأحد إلى الخميس).',
   'footer.col.hours': '',
   'footer.col.group': 'المجموعة',
   'footer.col.group.companies': 'الشركات',
@@ -386,7 +390,7 @@ const ar: Partial<Record<TranslationKey, string>> = {
   'footer.col.connect.careers': 'الوظائف',
   'footer.col.connect.press': 'الصحافة',
   'footer.col.connect.ir': 'علاقات المستثمرين',
-  'footer.copyright': '© 2026 أوج Corporate · جميع الحقوق محفوظة',
+  'footer.copyright': '© 2026 أوج · جميع الحقوق محفوظة',
   'footer.cities': 'الرياض · دبي · لندن · سنغافورة',
 
   // Pillar pages
@@ -424,6 +428,10 @@ const ar: Partial<Record<TranslationKey, string>> = {
   'newsPage.read': 'اقرأ',
   'newsPage.featuredBadge': 'مميّز',
   'newsPage.countOf': 'من',
+
+  // Document metadata
+  'meta.title': 'أوج | شركة تنمية الابتكار والتقنيات المستدامة',
+  'meta.description': 'أوج مجموعةٌ عُمانية تبني منظومات الابتكار وتطوّر القدرات وتُمكّن الاستدامة، عبر أربعة قطاعات و50 مشروعًا منجزًا.',
 };
 
 export const DICT: Record<Lang, Partial<Record<TranslationKey, string>>> = { en, ar };

@@ -16,6 +16,8 @@ type Project = {
   summary: string;
   impact: string;
   achievements: { value: string; label: string }[];
+  /** Approved Arabic for the card face (content notes 23-29); missing fields fall back to English. */
+  ar?: { name?: string; stat?: string; statLabel?: string; partner?: string };
 };
 
 const PROJECTS: Project[] = [
@@ -39,6 +41,11 @@ const PROJECTS: Project[] = [
       { value: 'GRI Standard', label: 'Compliant' },
       { value: 'Global', label: 'Best practices' },
     ],
+    ar: {
+      name: 'أبراج للطاقة\nتقرير الاستدامة',
+      // Item 29: fuller name taken from this project's own summary; awarding body still needed.
+      stat: 'جائزة أفضل تقرير استدامة',
+    },
   },
   {
     name: '.nxt Jadeer National Program',
@@ -60,6 +67,7 @@ const PROJECTS: Project[] = [
       { value: '2,700+', label: 'Employed' },
       { value: '20+', label: 'Startups established' },
     ],
+    ar: { name: 'برنامج «دوت نكست جدير» الوطني', statLabel: 'مشاركًا مُكَّنوا' },
   },
   {
     name: 'Oman AI Studio',
@@ -81,6 +89,7 @@ const PROJECTS: Project[] = [
       { value: '33', label: 'AI solutions' },
       { value: '7', label: 'Active startups' },
     ],
+    ar: { name: 'استوديو عُمان للذكاء الاصطناعي', statLabel: 'جهة حكومية مخدومة' },
   },
   {
     name: 'Leadership in Cultural & Creative Industries',
@@ -103,6 +112,7 @@ const PROJECTS: Project[] = [
       { value: '20+', label: 'Programs offered' },
       { value: '10', label: 'Strategic partners' },
     ],
+    ar: { statLabel: 'نسبة الرضا' },
   },
   {
     name: 'Planning & Strategy Platform',
@@ -145,6 +155,8 @@ const PROJECTS: Project[] = [
       { value: '100%', label: 'Recyclable materials' },
       { value: 'First in ME', label: 'Regional milestone' },
     ],
+    // Item 26 also asks for the completion year and the body that certified the "first".
+    ar: { name: 'أوّل مبنًى مطبوعٍ ثلاثيّ الأبعاد في الشرق الأوسط', partner: 'مع الجامعة الألمانية للتكنولوجيا (GUtech)' },
   },
   {
     name: 'Gulf Urban Planning Hackathon',
@@ -166,6 +178,7 @@ const PROJECTS: Project[] = [
       { value: '20', label: 'Solutions developed' },
       { value: 'Vision 2040', label: 'Strategic alignment' },
     ],
+    ar: { partner: 'متوافق مع رؤية عُمان 2040' },
   },
   {
     name: 'Oman National Framework for CSR Governance',
@@ -186,11 +199,15 @@ const PROJECTS: Project[] = [
       { value: 'Implementation', label: 'Framework status' },
       { value: 'National', label: 'Impact level' },
     ],
+    ar: { partner: 'مع وزارة التنمية الاجتماعية' },
   },
 ];
 
+const pick = (p: Project, k: 'name' | 'stat' | 'statLabel' | 'partner', lang: string) =>
+  (lang === 'ar' && p.ar?.[k]) || p[k];
+
 export const Projects = () => {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [open, setOpen] = useState<number | null>(null);
 
   useEffect(() => {
@@ -231,15 +248,15 @@ export const Projects = () => {
               {p.image && <img src={p.image} className="pt-bg-image" alt="" aria-hidden="true" />}
               <img src={p.icon} className="pt-icon" alt="" aria-hidden="true" />
               <img src={`/assets/brand/awj-${p.pillar.toLowerCase()}-logo-h.svg`} className="pt-pillar-logo" alt="" aria-hidden="true" />
-              <div className="pt-name">{p.name}</div>
+              <div className="pt-name">{pick(p, 'name', lang)}</div>
               <div className="pt-stat-block">
-                <div className="pt-stat">{p.stat}</div>
-                <div className="pt-stat-label">{p.statLabel}</div>
+                <div className="pt-stat">{pick(p, 'stat', lang)}</div>
+                <div className="pt-stat-label">{pick(p, 'statLabel', lang)}</div>
               </div>
               <div className="pt-foot">
                 <div className="pt-meta">
                   <span className="pt-pillar">AWJ {p.pillar}</span>
-                  <span className="pt-partner">{p.partner}</span>
+                  <span className="pt-partner">{pick(p, 'partner', lang)}</span>
                 </div>
               </div>
               <div className="pt-arrow">
@@ -287,7 +304,7 @@ export const Projects = () => {
                   />
                 </svg>
               </button>
-              <h3 className="pm-title">{PROJECTS[open].name}</h3>
+              <h3 className="pm-title">{pick(PROJECTS[open], 'name', lang)}</h3>
             </div>
             <div className="pm-body">
               {PROJECTS[open].image && <img src={PROJECTS[open].image} className="pm-body-image" alt="" aria-hidden="true" />}

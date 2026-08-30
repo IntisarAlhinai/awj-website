@@ -3,7 +3,14 @@ import { Cursor } from '../components/Cursor';
 import { useReveal } from '../hooks/useReveal';
 import { NavPill } from '../sections/NavPill';
 import { Footer } from '../sections/Footer';
-import { NEWS, type NewsItem } from '../data/news';
+import {
+  NEWS,
+  newsCategory,
+  newsDate,
+  newsPillar,
+  newsTitle,
+  type NewsItem,
+} from '../data/news';
 import { useLang } from '../i18n/LangContext';
 
 const NewsHero = () => {
@@ -41,7 +48,7 @@ const NewsHero = () => {
 type OpenHandler = (id: string) => void;
 
 const FeaturedSection = ({ onOpen }: { onOpen: OpenHandler }) => {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const featured = NEWS.filter((n) => n.featured);
   return (
     <section className="news-page-featured">
@@ -58,17 +65,17 @@ const FeaturedSection = ({ onOpen }: { onOpen: OpenHandler }) => {
               onClick={() => onOpen(n.id)}
             >
               <div className="npf-cover">
-                <img className="news-cover-img" src={n.image} alt={n.title} loading="lazy" />
-                <div className="npf-tag">{n.category}</div>
+                <img className="news-cover-img" src={n.image} alt="" aria-hidden="true" loading="lazy" />
+                <div className="npf-tag">{newsCategory(n.category, lang)}</div>
                 <div className="npf-featured-badge">{t('newsPage.featuredBadge')}</div>
               </div>
               <div className="npf-body">
                 <div className="npf-meta">
-                  <span>{n.dateLabel}</span>
+                  <span>{newsDate(n, lang)}</span>
                   <span className="dot">·</span>
-                  <span>{n.pillar}</span>
+                  <span>{newsPillar(n.pillar, lang)}</span>
                 </div>
-                <h3 className="npf-title">{n.title}</h3>
+                <h3 className="npf-title">{newsTitle(n, lang)}</h3>
                 <p className="npf-dek">{n.dek}</p>
                 <span className="npf-read">
                   {t('news.readStory')}
@@ -92,7 +99,7 @@ const FeaturedSection = ({ onOpen }: { onOpen: OpenHandler }) => {
 };
 
 const AllNewsSection = ({ onOpen }: { onOpen: OpenHandler }) => {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const all = useMemo(() => 'All', []);
   const cats = useMemo(() => [all, ...new Set(NEWS.map((n) => n.category))], [all]);
   const pillars = useMemo(() => [all, ...new Set(NEWS.map((n) => n.pillar))], [all]);
@@ -128,7 +135,7 @@ const AllNewsSection = ({ onOpen }: { onOpen: OpenHandler }) => {
                   className={`npa-chip ${filter === c ? 'is-active' : ''}`}
                   onClick={() => setFilter(c)}
                 >
-                  {c === all ? t('newsPage.filterAll') : c}
+                  {c === all ? t('newsPage.filterAll') : newsCategory(c as NewsItem['category'], lang)}
                 </button>
               ))}
             </div>
@@ -143,7 +150,7 @@ const AllNewsSection = ({ onOpen }: { onOpen: OpenHandler }) => {
                   className={`npa-chip ${pillarFilter === c ? 'is-active' : ''}`}
                   onClick={() => setPillarFilter(c)}
                 >
-                  {c === all ? t('newsPage.filterAll') : c}
+                  {c === all ? t('newsPage.filterAll') : newsPillar(c, lang)}
                 </button>
               ))}
             </div>
@@ -159,16 +166,16 @@ const AllNewsSection = ({ onOpen }: { onOpen: OpenHandler }) => {
               onClick={() => onOpen(n.id)}
             >
               <div className="npa-cover">
-                <img className="news-cover-img" src={n.image} alt={n.title} loading="lazy" />
-                <div className="npa-tag">{n.category}</div>
+                <img className="news-cover-img" src={n.image} alt="" aria-hidden="true" loading="lazy" />
+                <div className="npa-tag">{newsCategory(n.category, lang)}</div>
               </div>
               <div className="npa-body">
                 <div className="npa-meta">
-                  <span>{n.dateLabel}</span>
+                  <span>{newsDate(n, lang)}</span>
                   <span className="dot">·</span>
-                  <span>{n.pillar}</span>
+                  <span>{newsPillar(n.pillar, lang)}</span>
                 </div>
-                <h3 className="npa-title">{n.title}</h3>
+                <h3 className="npa-title">{newsTitle(n, lang)}</h3>
                 <p className="npa-dek">{n.dek}</p>
                 <span className="npa-read">
                   {t('newsPage.read')}
@@ -196,6 +203,7 @@ const AllNewsSection = ({ onOpen }: { onOpen: OpenHandler }) => {
 };
 
 const ArticleModal = ({ article, onClose }: { article: NewsItem; onClose: () => void }) => {
+  const { lang } = useLang();
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -223,18 +231,18 @@ const ArticleModal = ({ article, onClose }: { article: NewsItem; onClose: () => 
           </svg>
         </button>
         <div className="am-cover">
-          <img className="news-cover-img" src={article.image} alt={article.title} />
+          <img className="news-cover-img" src={article.image} alt={newsTitle(article, lang)} />
           <div className="am-cover-overlay">
-            <div className="am-cover-tag">{article.category}</div>
+            <div className="am-cover-tag">{newsCategory(article.category, lang)}</div>
             <div className="am-cover-meta">
-              <span>{article.dateLabel}</span>
+              <span>{newsDate(article, lang)}</span>
               <span className="dot">·</span>
-              <span>{article.pillar}</span>
+              <span>{newsPillar(article.pillar, lang)}</span>
             </div>
           </div>
         </div>
         <div className="am-body">
-          <h1 className="am-title">{article.title}</h1>
+          <h1 className="am-title">{newsTitle(article, lang)}</h1>
           <p className="am-dek">{article.dek}</p>
           <div className="am-rule"></div>
           <div className="am-text">
@@ -244,7 +252,7 @@ const ArticleModal = ({ article, onClose }: { article: NewsItem; onClose: () => 
           </div>
           <div className="am-footer">
             <span className="am-attrib">
-              {article.pillar}, {article.dateLabel}
+              {newsPillar(article.pillar, lang)}, {newsDate(article, lang)}
             </span>
           </div>
         </div>

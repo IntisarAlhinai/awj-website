@@ -15,6 +15,33 @@ type PillarItem = {
   meta: MetaRow[];
 };
 
+const FULL_NAME_KEY: Record<string, TranslationKey> = {
+  academy: 'pillar.academy.fullName',
+  sustain: 'pillar.sustain.fullName',
+  innovation: 'pillar.innovation.fullName',
+  systems: 'pillar.systems.fullName',
+};
+
+/**
+ * The Arabic card copy reads "Pillar name: sentence". Split it so the name sits
+ * bold on its own line above the quoted sentence. Copy without that prefix
+ * (English) renders unchanged.
+ */
+const CardDesc = ({ id, descKey }: { id: string; descKey: TranslationKey }) => {
+  const { t } = useLang();
+  const full = t(FULL_NAME_KEY[id]);
+  const body = t(descKey);
+  if (!FULL_NAME_KEY[id] || !body.startsWith(`${full}:`)) {
+    return <p className="desc">{body}</p>;
+  }
+  return (
+    <p className="desc">
+      <strong className="desc-name">{full}:</strong>
+      <span className="desc-quote">{body.slice(full.length + 1).trim()}</span>
+    </p>
+  );
+};
+
 const PILLAR_DATA: PillarItem[] = [
   {
     id: 'academy',
@@ -140,7 +167,7 @@ export const PillarsStack = () => {
               <>{t('pillars.title.first')} <em>{t('pillars.title.second')}</em></>
             ) : (
               <>
-                <img src="/assets/brand/awj-logo-v.svg" alt="AWJ" className="section-awj-logo" /> <em>{t('pillars.title.second')}</em>
+                <img src="/assets/brand/awj-logo-v.svg" alt={t('brand.logoAlt')} className="section-awj-logo" /> <em>{t('pillars.title.second')}</em>
               </>
             )}
           </h2>
@@ -171,7 +198,7 @@ export const PillarsStack = () => {
                   <img src={p.icon} alt={`AWJ ${p.name}`} className="card-logo-img" />
                 </div>
                 <div className="card-content">
-                  <p className="desc">{t(p.descKey)}</p>
+                  <CardDesc id={p.id} descKey={p.descKey} />
                 </div>
               </div>
             ))}

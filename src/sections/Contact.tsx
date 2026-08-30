@@ -55,10 +55,10 @@ export const Contact = () => {
   };
 
   const pillarOpts = [
-    { id: 'academy', label: t('contact.pillar.academy.label') },
-    { id: 'sustain', label: t('contact.pillar.sustain.label') },
     { id: 'innovation', label: t('contact.pillar.innovation.label') },
+    { id: 'sustain', label: t('contact.pillar.sustain.label') },
     { id: 'systems', label: t('contact.pillar.systems.label') },
+    { id: 'academy', label: t('contact.pillar.academy.label') },
   ];
   const steps: { title: string; body: ReactNode }[] = [
     {

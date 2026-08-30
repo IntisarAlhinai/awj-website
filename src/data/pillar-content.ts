@@ -94,7 +94,7 @@ export const PILLAR_CONTENT: Record<PillarId, PillarContentBundle> = {
     ar: {
       websiteUrl: 'https://dotnxt.om',
       definition:
-        'قطاع متخصص في تصميم وتطوير وتشغيل منظومات الابتكار وريادة الأعمال، وتحويل الأفكار والأبحاث إلى مشاريع وشركات ذات أثر اقتصادي وتنموي مستدام.',
+        'أوج الابتكار قطاعٌ متخصّص في تصميم منظومات الابتكار وريادة الأعمال وتطويرها وتشغيلها، وتحويل الأفكار والأبحاث إلى مشاريع وشركات ذات أثر اقتصادي وتنموي مستدام.',
       coreServices: [
         {
           items: [
@@ -194,7 +194,7 @@ export const PILLAR_CONTENT: Record<PillarId, PillarContentBundle> = {
     ar: {
       websiteUrl: 'https://awj.om/pillars/sustain',
       definition:
-        'أوج للاستدامة هي الذراع المتخصص في الاستدامة والتميز المؤسسي ضمن مجموعة أوج، تقدّم حلولاً متكاملة في حوكمة (ESG) والمسؤولية الاجتماعية والتحول المؤسسي المستدام.',
+        'أوج الاستدامة هي الذراع المتخصّصة في الاستدامة والتميز المؤسسي ضمن مجموعة أوج، تقدّم حلولًا في الحوكمة البيئية والاجتماعية والمؤسسية (ESG) والمسؤولية الاجتماعية والتحول المؤسسي المستدام.',
       coreServices: [
         {
           items: [
@@ -272,7 +272,7 @@ export const PILLAR_CONTENT: Record<PillarId, PillarContentBundle> = {
     ar: {
       websiteUrl: 'https://academy.awj.om/',
       definition:
-        'أكاديمية أوج منصة متكاملة للمعرفة والتدريب والحوار العلمي، تقدّم برامج تعليمية وتدريبية متقدمة وشاملة تلبّي الاحتياجات الفعلية لسوق العمل والمجتمع، مع التركيز على التمكين بالمعارف والمهارات في بيئة تفاعلية تجمع بين الخبرات العالمية والسياق المحلي.',
+        'أكاديمية أوج منصة متكاملة للمعرفة والتدريب والحوار العلمي، تقدّم برامج تعليمية وتدريبية بلغ عدد خرّيجيها 7,600 مهنيّ، مبنيّةٌ على احتياج سوق العمل والمجتمع، مع التركيز على التمكين بالمعارف والمهارات في بيئة تفاعلية تجمع بين الخبرات العالمية والسياق المحلي.',
       coreServices: [
         {
           items: [
@@ -297,7 +297,7 @@ export const PILLAR_CONTENT: Record<PillarId, PillarContentBundle> = {
     en: {
       websiteUrl: 'https://systems.awj.om/',
       definition:
-        'A center of excellence in future technologies, specializing in data, artificial intelligence, quantum computing, and emerging technologies, to develop smart solutions and systems that support innovation, institutional transformation, and decision-making.',
+        'We design, develop, and integrate production-ready software systems and artificial intelligence solutions for government bodies and major institutions across Oman and the Gulf, working along three tracks: projects, products, and research and development.',
       coreServices: [
         {
           group: 'Projects',
