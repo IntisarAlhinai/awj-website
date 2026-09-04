@@ -103,6 +103,43 @@ const SERVICE_ICONS: Record<string, string> = {
   'Knowledge Services': 'fa-book-open',
   'Scientific Events': 'fa-calendar-days',
   'Consulting Services': 'fa-clipboard-list',
+
+  // The map is keyed on the rendered service name, so the Arabic names need
+  // their own entries: without them every Arabic card lost its icon, and with
+  // it the icon column that the card grid reserves, leaving the Arabic cards
+  // laid out differently from the English ones. Each Arabic service carries the
+  // icon of its English counterpart.
+
+  // Innovation (AR)
+  'تصميم وإدارة البرامج الابتكارية': 'fa-pen-ruler',
+  'نقل وتوطين العلوم والمعرفة والتكنولوجيا': 'fa-right-left',
+  'تشغيل الحاضنات والمسرعات': 'fa-rocket',
+  'تطوير مكاتب نقل التكنولوجيا': 'fa-building',
+  'تنظيم الهاكاثونات والتحديات': 'fa-laptop-code',
+  'بناء القدرات الوطنية': 'fa-people-group',
+  'الاستشارات الاستراتيجية': 'fa-chess-knight',
+  'إدارة الملكية الفكرية': 'fa-copyright',
+  'تطوير منظومات الابتكار المؤسسي': 'fa-network-wired',
+
+  // Sustain (AR)
+  'تقارير ESG والإفصاح عن الاستدامة': 'fa-file-contract',
+  'استراتيجية الاستدامة واستشارات المسؤولية المجتمعية': 'fa-leaf',
+  'ذكاء ESG وأدوات الذكاء الاصطناعي': 'fa-brain',
+  'الخدمات البيئية والمناخية': 'fa-solar-panel',
+  'تطبيق معايير ISO والاعتماد': 'fa-certificate',
+  'التدريب على الاستدامة وبناء القدرات': 'fa-chalkboard-user',
+
+  // Academy (AR)
+  'البرامج التدريبية': 'fa-person-chalkboard',
+  'خدمات المعرفة': 'fa-book-open',
+  'الفعاليات العلمية': 'fa-calendar-days',
+  'خدمات الاستشارات': 'fa-clipboard-list',
+
+  // Systems (AR)
+  الاستشارة: 'fa-compass',
+  البناء: 'fa-code',
+  التعزيز: 'fa-robot',
+  'المنتجات والبحث والتطوير': 'fa-layer-group',
 };
 
 /**

@@ -32,11 +32,25 @@ import sustainH from '../../public/assets/brand/awj-sustain-logo-h.svg?raw';
 import innovationH from '../../public/assets/brand/awj-innovation-logo-h.svg?raw';
 import systemsH from '../../public/assets/brand/awj-systems-logo-h.svg?raw';
 
+import academyIcon from '../../public/assets/brand/awj-academy-icon.svg?raw';
+import sustainIcon from '../../public/assets/brand/awj-sustain-icon.svg?raw';
+import innovationIcon from '../../public/assets/brand/awj-innovation-icon.svg?raw';
+import systemsIcon from '../../public/assets/brand/awj-systems-icon.svg?raw';
+
 const LOGO_RAW: Record<PillarId, string> = {
   academy: academyH,
   sustain: sustainH,
   innovation: innovationH,
   systems: systemsH,
+};
+
+/** Icon marks, inlined so the dark-surface recolor below can reach their paths
+ *  the same way it reaches the H-lockup's. */
+const ICON_RAW: Record<PillarId, string> = {
+  academy: academyIcon,
+  sustain: sustainIcon,
+  innovation: innovationIcon,
+  systems: systemsIcon,
 };
 
 type Props = {
@@ -62,20 +76,34 @@ export const PillarLogo = ({
 
   if (lang === 'ar') {
     const label = t(`pillar.${pillarId}.fullName` as TranslationKey);
+    const onDark = variant === 'onDark';
     const textCls = `pillar-logo-text pillar-logo-${pillarId}` +
-      (variant === 'onDark' ? ' on-dark' : '');
+      (onDark ? ' on-dark' : '');
     return (
       <span
-        className={`${wrapperCls} pillar-logo-composed`}
+        className={`${wrapperCls} pillar-logo-composed${onDark ? ' on-dark' : ''}`}
         role="img"
         aria-label={ariaLabel ?? label}
       >
-        <img
-          src={pillar.icon}
-          alt=""
-          aria-hidden="true"
-          className="pillar-logo-icon"
-        />
+        {onDark ? (
+          // Inlined rather than an <img> so the Case-C whitening applies to the
+          // mark exactly as it does on the English lockup, which the rule
+          // already renders entirely white on a dark surface. An <img> cannot
+          // be recolored without a filter, and the brand assets are never
+          // filtered.
+          <span
+            className="pillar-logo-icon"
+            aria-hidden="true"
+            dangerouslySetInnerHTML={{ __html: ICON_RAW[pillarId] }}
+          />
+        ) : (
+          <img
+            src={pillar.icon}
+            alt=""
+            aria-hidden="true"
+            className="pillar-logo-icon"
+          />
+        )}
         <span className={`${textCls} pillar-logo-ar`}>{label}</span>
       </span>
     );

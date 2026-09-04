@@ -405,6 +405,8 @@ const ar: Partial<Record<TranslationKey, string>> = {
   'pillarPage.clients': 'العملاء والشركاء',
   'pillarPage.clients.clients': 'العملاء',
   'pillarPage.clients.partners': 'الشركاء',
+  'pillarPage.readMore': 'اقرأ المزيد',
+  'pillarPage.showLess': 'عرض أقل',
   'pillarPage.contact': 'تواصل معنا',
   'pillarPage.cta': 'زيارة',
   'pillarPage.contact.email': 'البريد الإلكتروني',

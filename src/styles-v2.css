@@ -2338,6 +2338,13 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
   width: auto; height: 1.15em;
   flex-shrink: 0;
 }
+/* The dark-surface composed lockup inlines the mark instead of using an <img>,
+   so the SVG takes the box the <img> would have had. */
+.pillar-logo-icon > svg {
+  display: block;
+  height: 100%;
+  width: auto;
+}
 
 /* Text fallback rendering */
 .pillar-logo-text {
@@ -2616,6 +2623,17 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
   width: auto; max-width: 100%;
   display: block;
 }
+/* The composed lockup (brand icon + live text, used for Arabic) is authored as
+   an inline-flex row, but `.pillar-hero-logo` above ties it on specificity and
+   wins on source order, resetting it to `display: block`. The icon then sits on
+   the text baseline instead of centred beside it, so the line box grows to the
+   icon's full height plus the font's descent and spills out of the fixed height
+   onto the lede. Restore the flex row; the box keeps the height set above, so
+   the Arabic lockup measures exactly what the English one does. */
+.pillar-hero-logo.pillar-logo-composed {
+  display: inline-flex;
+  align-items: center;
+}
 .pillar-hero-lede {
   max-width: 720px; font-size: 20px; line-height: 1.6;
   opacity: 0.82; margin-bottom: 0;
@@ -2630,6 +2648,42 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
 }
 .pillar-hero-grid.has-visual .pillar-hero-lede { max-width: 560px; }
 .pillar-hero-content { min-width: 0; }
+/* Arabic keeps the mark on the right, as in English, and right-aligns the copy
+   against it. Splitting the row into two fr tracks and handing the copy the
+   left one parks it in the middle of the section, because the tracks divide the
+   container evenly while the mark occupies only its own width at the far edge.
+
+   So the copy spans the full row instead and reserves the mark's width as
+   inline-end padding. The mark is absolutely positioned against `.container`
+   and bleeds 64px past it, and a 48px gap matches the grid's own, so the
+   reserve is `mark width - 104px + 48px`. Each pillar's mark is a different
+   width, hence the per-pillar values; the widths come from the artwork's aspect
+   ratio at the hero's fixed height, so they hold at every viewport width.
+
+   The visual shares the same grid area rather than taking a track of its own:
+   it is an empty box once the mark inside it goes absolute, so overlapping the
+   copy costs nothing and keeps the row a single line.
+
+   Scoped above 900px: below it the visual and its mark are hidden, so the copy
+   takes the full width with no reserve. */
+@media (min-width: 901px) {
+  .pillar-page--rtl[data-pillar='innovation'] { --hero-mark-reserve: 572px; }
+  .pillar-page--rtl[data-pillar='systems'] { --hero-mark-reserve: 345px; }
+  .pillar-page--rtl[data-pillar='academy'] { --hero-mark-reserve: 283px; }
+  .pillar-page--rtl[data-pillar='sustain'] { --hero-mark-reserve: 240px; }
+
+  .pillar-page--rtl .pillar-hero-grid.has-visual > .pillar-hero-content,
+  .pillar-page--rtl .pillar-hero-grid.has-visual > .pillar-hero-visual {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  /* Physical `padding-right`, not `padding-inline-end`: the reserve is for the
+     mark, which sits on the right whatever the direction, and inline-end
+     resolves to the left under RTL. */
+  .pillar-page--rtl .pillar-hero-grid.has-visual > .pillar-hero-content {
+    padding-right: var(--hero-mark-reserve, 340px);
+  }
+}
 .pillar-hero-visual {
   position: relative;
   min-height: 300px;
@@ -2665,7 +2719,9 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
 /* Span the mark across the full hero height, anchored to the right. It breaks
    out of the centred grid cell and stretches from the section's top edge to its
    bottom edge; the negative top/bottom cancel the hero's 118px/56px padding.
-   The visual only shows above 900px, where that padding applies. */
+   The visual only shows above 900px, where that padding applies.
+   Physical `right`, not `inset-inline-end`: the mark keeps the right edge in
+   both languages. The Arabic grid pins its tracks to match (see below). */
 .pillar-hero .pillar-hero-visual { position: static; }
 .pillar-hero .pillar-hero-visual::before { display: none; }
 .pillar-hero .pillar-hero-mark-wrap {
@@ -3232,19 +3288,31 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
   font-size: 13px;
 }
 
-/* Systems lays its three groups out left to right rather than stacked. The
-   grid gap replaces the stacked margin, and each panel's cards drop to a
-   single column at panel width. */
+/* Systems lays its groups out left to right rather than stacked. The grid gap
+   replaces the stacked margin, and each panel's cards drop to a single column
+   at panel width.
+
+   `auto-fit` rather than a hardcoded `repeat(3, ...)`: the three-track count
+   only holds for the English content. The Arabic page carries its services in
+   one group, and a fixed three-column track list squeezed that lone group into
+   a third of the container, leaving 95px-wide cards whose titles wrapped one
+   character per line. Empty tracks collapse, so three groups still land on
+   three equal columns and one group takes the full width. */
 .pillar-page[data-pillar="systems"] .pillar-service-groups {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 20px;
   align-items: stretch;
 }
 .pillar-page[data-pillar="systems"] .pillar-service-groups .pillar-service-group + .pillar-service-group {
   margin-top: 0;
 }
-.pillar-page[data-pillar="systems"] .pillar-service-groups .pillar-service-grid {
+/* Single-column cards are a consequence of the narrow panels, so this is
+   conditioned on there actually being more than one panel. With a single
+   full-width group the cards flow on the normal services grid instead. */
+.pillar-page[data-pillar="systems"]
+  .pillar-service-groups:has(.pillar-service-group + .pillar-service-group)
+  .pillar-service-grid {
   grid-template-columns: minmax(0, 1fr);
 }
 @media (max-width: 1080px) {
@@ -3724,7 +3792,10 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
   padding-bottom: 22px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
-.pillar-page--rtl .pillar-contact-row { grid-template-columns: 1fr 140px; }
+/* No RTL track swap here. The grid already resolves track 1 to the right-hand
+   side under `dir="rtl"`, so mirroring the list by hand flipped it twice and
+   handed the 140px label track to the value and the 1fr value track to the
+   label. The base `140px 1fr` gives both languages a 140px label column. */
 .pillar-contact-key {
   font-family: var(--font-body); font-size: 20px;
     color: rgba(255, 255, 255, 0.5);
@@ -5405,3 +5476,25 @@ a:focus-visible,
     background: rgba(255, 255, 255, 0.18);
   }
 }
+
+/* ============================================================
+   Pillar hero, Arabic.
+
+   The copy column keeps the English position: it stays in the
+   grid track on the left, opposite the mark on the right, so the
+   two languages frame the section the same way. What sits inside
+   that column is fully RTL, though, so the lockup and the lede
+   right-align against the column's inner edge and the mark reads
+   to the right of the pillar name.
+
+   Only the back link is pinned to the English side; the rest of
+   the hero is left to the page's own RTL direction.
+   ============================================================ */
+
+/* The back link sits in a `space-between` flex row whose single child lands on
+   the main-start edge, which RTL puts on the right. LTR direction on the row
+   moves it to the left as in English, and orders the arrow before the label. */
+.pillar-page--rtl .pillar-hero-top { direction: ltr; }
+/* ...so the arrow points left, toward the edge it now sits on, exactly as the
+   English one does. Overrides the RTL flip applied to back arrows elsewhere. */
+.pillar-page--rtl .pillar-hero-top .news-back svg { transform: none; }
