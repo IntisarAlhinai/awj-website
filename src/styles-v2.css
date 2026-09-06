@@ -3869,7 +3869,11 @@ a.pillar-contact-val:hover { color: var(--pillar-accent); }
 [dir="rtl"] .nri-arrow svg,
 [dir="rtl"] .bento-cta svg,
 [dir="rtl"] .footer-newsletter button svg,
-[dir="rtl"] .nav-mobile-cta svg {
+[dir="rtl"] .nav-mobile-cta svg,
+/* The pillars carousel prev/next: the flex row already mirrors which side each
+   button sits on, but the arrowheads are drawn LTR, so without this the button
+   on the left points right and the one on the right points left. */
+[dir="rtl"] .stack-btn svg {
   transform: scaleX(-1);
 }
 /* Back-arrow stays semantically pointing toward the home, so it flips too. */
