@@ -374,7 +374,7 @@ export const PILLAR_CONTENT: Record<PillarId, PillarContentBundle> = {
       contact: {
         email: 'systems@awj.om',
         phone: '+968 9895 7933',
-        location: 'ساحة المزون، الطابق الخامس، الخوض، مسقط',
+        location: 'مزون سكوير، الطابق الخامس، الخوض، مسقط، سلطنة عُمان',
         social: [
           { label: 'Instagram', handle: '@awj.corp', url: 'https://www.instagram.com/awj.corp' },
         ],
