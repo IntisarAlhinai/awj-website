@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useState, type ChangeEvent, type ReactNode } from 'react';
 import { Magnetic } from '../components/Magnetic';
 import { useLang } from '../i18n/LangContext';
 
@@ -8,6 +8,76 @@ type FormData = {
   email: string;
   org: string;
   message: string;
+};
+
+/** Good enough to catch a typo before the round trip; send.php still has the
+ *  final say via filter_var, so this never rejects an address the server
+ *  would have taken. */
+const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+
+/**
+ * One wizard field.
+ *
+ * The label is a real <label>, and it sits over the input until there is
+ * something in it, at which point it floats above as a caption. The old
+ * placeholder-only version left a filled field with no visible name at all,
+ * so anyone returning to the step (typically after a validation error) saw
+ * two bare strings and had to guess which was which.
+ *
+ * `placeholder=" "` is load-bearing: the float is driven by
+ * `:placeholder-shown`, so the single space must stay.
+ *
+ * Declared at module scope, not inside Contact: a component defined during
+ * render is a new type every keystroke, which would remount the input and
+ * drop focus mid-word.
+ */
+const Field = ({
+  id,
+  label,
+  value,
+  onChange,
+  onBlur,
+  type = 'text',
+  textarea = false,
+  invalid = false,
+  error,
+  autoComplete,
+}: {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  onBlur?: () => void;
+  type?: string;
+  textarea?: boolean;
+  invalid?: boolean;
+  error?: string;
+  autoComplete?: string;
+}) => {
+  const errorId = `${id}-error`;
+  const shared = {
+    id,
+    name: id,
+    value,
+    placeholder: ' ',
+    autoComplete,
+    onBlur,
+    'aria-invalid': invalid || undefined,
+    'aria-describedby': invalid ? errorId : undefined,
+    onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      onChange(e.target.value),
+  };
+  return (
+    <div className={`wizard-field${invalid ? ' is-invalid' : ''}`}>
+      {textarea ? <textarea {...shared} /> : <input type={type} {...shared} />}
+      <label htmlFor={id}>{label}</label>
+      {invalid && error && (
+        <p className="wizard-field-error" id={errorId}>
+          {error}
+        </p>
+      )}
+    </div>
+  );
 };
 
 export const Contact = () => {
@@ -24,8 +94,25 @@ export const Contact = () => {
     org: '',
     message: '',
   });
-  const update = <K extends keyof FormData>(k: K, v: FormData[K]) =>
+  // Which fields the visitor has actually left, so nothing is marked wrong
+  // while they are still part-way through typing it.
+  const [touched, setTouched] = useState<{ name?: boolean; email?: boolean }>({});
+
+  const update = <K extends keyof FormData>(k: K, v: FormData[K]) => {
     setData((d) => ({ ...d, [k]: v }));
+    // A stale "please provide a valid email" sitting under the form while the
+    // visitor is fixing exactly that reads as though the fix did not register.
+    if (errorMsg) {
+      setErrorMsg('');
+      setStatus('idle');
+    }
+  };
+
+  const invalid = {
+    name: data.name.trim() === '',
+    email: !isEmail(data.email),
+  };
+  const detailsIncomplete = invalid.name || invalid.email;
 
   const reset = () =>
     setData({ pillar: '', name: '', email: '', org: '', message: '' });
@@ -87,26 +174,40 @@ export const Contact = () => {
       title: t('contact.step3'),
       body: (
         <div className="wizard-fields">
-          <input
-            placeholder={t('contact.field.name')}
+          <Field
+            id="name"
+            label={t('contact.field.name')}
             value={data.name}
-            onChange={(e) => update('name', e.target.value)}
+            onChange={(v) => update('name', v)}
+            onBlur={() => setTouched((s) => ({ ...s, name: true }))}
+            invalid={Boolean(touched.name) && invalid.name}
+            error={t('contact.err.name')}
+            autoComplete="name"
           />
-          <input
-            placeholder={t('contact.field.email')}
+          <Field
+            id="email"
             type="email"
+            label={t('contact.field.email')}
             value={data.email}
-            onChange={(e) => update('email', e.target.value)}
+            onChange={(v) => update('email', v)}
+            onBlur={() => setTouched((s) => ({ ...s, email: true }))}
+            invalid={Boolean(touched.email) && invalid.email}
+            error={t('contact.err.email')}
+            autoComplete="email"
           />
-          <input
-            placeholder={t('contact.field.org')}
+          <Field
+            id="org"
+            label={t('contact.field.org')}
             value={data.org}
-            onChange={(e) => update('org', e.target.value)}
+            onChange={(v) => update('org', v)}
+            autoComplete="organization"
           />
-          <textarea
-            placeholder={t('contact.field.message')}
+          <Field
+            id="message"
+            textarea
+            label={t('contact.field.message')}
             value={data.message}
-            onChange={(e) => update('message', e.target.value)}
+            onChange={(v) => update('message', v)}
           />
         </div>
       ),
@@ -227,6 +328,16 @@ export const Contact = () => {
                       className="wizard-next"
                       disabled={status === 'sending'}
                       onClick={() => {
+                        // Stop here rather than carrying bad details to the
+                        // summary, which has nothing to edit: the visitor
+                        // would have to guess their way back.
+                        if (step === 1 && detailsIncomplete) {
+                          setTouched({ name: true, email: true });
+                          document
+                            .querySelector<HTMLElement>('.wizard-field.is-invalid input')
+                            ?.focus();
+                          return;
+                        }
                         if (step < steps.length - 1) setStep((s) => s + 1);
                         else submit();
                       }}

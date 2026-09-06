@@ -2151,7 +2151,51 @@ button.project-tile { border: 0; font: inherit; text-align: left; cursor: pointe
 .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 100px; align-items: center; position: relative; z-index: 2; }
 /* Contact: moved off inline styles. */
 .contact-title { margin-top: 24px; }
-.wizard-fields { display: grid; gap: 8px; }
+/* Roomier than the old 8px: each field now reserves space above itself for the
+   floated label, and an invalid one grows again to seat its message. */
+.wizard-fields { display: grid; gap: 12px; }
+
+/* Floating label. The label starts where the placeholder used to sit and
+   rises into a caption once the field has content or focus, so a filled
+   field still says what it is. The reserved top padding is what the label
+   rises into, so nothing shifts when it moves. */
+.wizard-field { position: relative; padding-top: 20px; }
+.wizard-field label {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 34px;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 300;
+  color: rgba(250, 248, 243, 0.4);
+  pointer-events: none;
+  transition: top 0.22s var(--ease-out), font-size 0.22s var(--ease-out),
+    color 0.22s var(--ease-out);
+}
+/* `:placeholder-shown` is false as soon as there is a value, which is why the
+   inputs keep a single-space placeholder. */
+.wizard-field input:focus + label,
+.wizard-field textarea:focus + label,
+.wizard-field input:not(:placeholder-shown) + label,
+.wizard-field textarea:not(:placeholder-shown) + label {
+  top: 0;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: rgba(250, 248, 243, 0.62);
+}
+.wizard-field input:focus + label,
+.wizard-field textarea:focus + label { color: var(--paper); }
+
+.wizard-field.is-invalid input,
+.wizard-field.is-invalid textarea { border-bottom-color: #ff9a8a; }
+.wizard-field.is-invalid label { color: #ff9a8a; }
+.wizard-field-error {
+  margin: 6px 0 0;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.4;
+  color: #ff9a8a;
+}
 .honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 @media (max-width: 980px) { .contact-grid { grid-template-columns: 1fr; gap: 50px; } }
 .contact h2 { font-family: var(--font-display); font-weight: 700; font-size: clamp(48px, 6vw, 96px); line-height: 0.95; }
