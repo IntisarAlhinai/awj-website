@@ -7,7 +7,7 @@ import { useReveal } from '../hooks/useReveal';
 import { NavPill } from '../sections/NavPill';
 import { Footer } from '../sections/Footer';
 import { PILLARS, type PillarId } from '../data/pillars';
-import { PILLAR_CONTENT } from '../data/pillar-content';
+import { getPillarContent } from '../data/pillar-content';
 import { PILLAR_ORGS, type OrgLogo } from '../data/pillar-partners';
 import { useLang } from '../i18n/LangContext';
 import type { TranslationKey } from '../i18n/dict';
@@ -105,12 +105,11 @@ const SERVICE_ICONS: Record<string, string> = {
   'Consulting Services': 'fa-clipboard-list',
 
   // The map is keyed on the rendered service name, so the Arabic names need
-  // their own entries: without them every Arabic card lost its icon, and with
-  // it the icon column that the card grid reserves, leaving the Arabic cards
-  // laid out differently from the English ones. Each Arabic service carries the
-  // icon of its English counterpart.
-
-  // Innovation (AR)
+  // their own entries: without them every Arabic card loses its icon and the
+  // icon column the card grid reserves, so the Arabic cards lay out
+  // differently from the English ones. Each Arabic service carries the icon
+  // of its English counterpart.
+  // innovation (AR)
   'تصميم وإدارة البرامج الابتكارية': 'fa-pen-ruler',
   'نقل وتوطين العلوم والمعرفة والتكنولوجيا': 'fa-right-left',
   'تشغيل الحاضنات والمسرعات': 'fa-rocket',
@@ -121,25 +120,35 @@ const SERVICE_ICONS: Record<string, string> = {
   'إدارة الملكية الفكرية': 'fa-copyright',
   'تطوير منظومات الابتكار المؤسسي': 'fa-network-wired',
 
-  // Sustain (AR)
-  'تقارير ESG والإفصاح عن الاستدامة': 'fa-file-contract',
-  'استراتيجية الاستدامة واستشارات المسؤولية المجتمعية': 'fa-leaf',
-  'ذكاء ESG وأدوات الذكاء الاصطناعي': 'fa-brain',
-  'الخدمات البيئية والمناخية': 'fa-solar-panel',
-  'تطبيق معايير ISO والاعتماد': 'fa-certificate',
-  'التدريب على الاستدامة وبناء القدرات': 'fa-chalkboard-user',
+  // sustain (AR)
+  'الاستراتيجية والاستشارات في الاستدامة': 'fa-leaf',
+  'قياس وتقييم أثر المسؤولية الاجتماعية': 'fa-hand-holding-heart',
+  'الذكاء الاصطناعي وأدوات بيانات الاستدامة': 'fa-brain',
+  'إعداد تقارير الاستدامة والإفصاح': 'fa-file-contract',
+  'الاستشارات في الطاقة المتجددة واستراتيجيات المناخ': 'fa-solar-panel',
+  'تطبيق معايير الأيزو والاعتماد الدولي': 'fa-certificate',
+  'التدريب وبناء القدرات في الاستدامة': 'fa-chalkboard-user',
+  'إدارة التغيير والاعتماد المهني': 'fa-arrows-spin',
+  'الأداء الاستراتيجي والتحسين المستمر': 'fa-gauge-simple-high',
+  'تطوير القيادة والتدريب التنفيذي': 'fa-user-tie',
+  'إدارة المخاطر وأطر الحوكمة': 'fa-scale-balanced',
+  'Lean Six Sigma وكايزن': 'fa-recycle',
+  'تقييم الثقافة المؤسسية': 'fa-building-flag',
 
-  // Academy (AR)
+  // academy (AR)
   'البرامج التدريبية': 'fa-person-chalkboard',
   'خدمات المعرفة': 'fa-book-open',
   'الفعاليات العلمية': 'fa-calendar-days',
   'خدمات الاستشارات': 'fa-clipboard-list',
 
-  // Systems (AR)
-  الاستشارة: 'fa-compass',
-  البناء: 'fa-code',
-  التعزيز: 'fa-robot',
-  'المنتجات والبحث والتطوير': 'fa-layer-group',
+  // systems (AR)
+  'الاستشارة': 'fa-compass',
+  'البناء': 'fa-code',
+  'التعزيز': 'fa-robot',
+  'بناء المشاريع': 'fa-seedling',
+  'محفظة المنتجات': 'fa-layer-group',
+  'البحث المتقدم': 'fa-microscope',
+  'تحويل نتائج البحث': 'fa-money-bill-trend-up',
 };
 
 /**
@@ -180,6 +189,33 @@ const VALUE_ICONS: Record<string, string> = {
     'fa-server',
   'A cumulative technical advantage from R&D that puts clients at the frontier of what is possible':
     'fa-lightbulb',
+  // innovation (AR)
+  'تمكين الجهات من بناء منظومات ابتكار مستدامة': 'fa-diagram-project',
+  'تسريع تحويل الأفكار إلى مشاريع قابلة للتنفيذ': 'fa-arrows-rotate',
+  'تعزيز الجاهزية المستقبلية': 'fa-rocket',
+  'رفع كفاءة الكفاءات الوطنية': 'fa-users-gear',
+  'تحقيق أثر اقتصادي وتنموي ملموس': 'fa-arrow-trend-up',
+
+  // sustain (AR)
+  'تحويل الاستدامة إلى ميزة تنافسية': 'fa-trophy',
+  'تعزيز الامتثال وإدارة المخاطر': 'fa-shield-halved',
+  'تحسين الأداء المؤسسي والتشغيلي': 'fa-gauge-high',
+  'دعم اتخاذ القرار المبني على البيانات': 'fa-database',
+  'تعزيز السمعة والجاذبية الاستثمارية': 'fa-award',
+
+  // academy (AR)
+  'مزيج من الخبرات المحلية والممارسات العالمية': 'fa-globe',
+  'نخبة من الخبراء والاستشاريين ذوي الخبرة الواسعة': 'fa-user-tie',
+  'التزام بتحقيق نتائج ملموسة وقابلة للقياس': 'fa-bullseye',
+  'برامج معتمدة متوائمة مع وظائف المستقبل واحتياجات سوق العمل': 'fa-graduation-cap',
+  'بيئة تفاعلية تجمع بين الخبرة الدولية والسياق المحلي': 'fa-comments',
+  'بناء شراكات استراتيجية مستدامة': 'fa-handshake',
+
+  // systems (AR)
+  'أنظمة تصمد أمام التدقيق الصارم': 'fa-shield-halved',
+  'سرعة في الإنجاز دون المساس بالاستقرار المؤسسي': 'fa-bolt',
+  'بنية تحتية وطنية مهندَسة محليًا تحترم قوانين الإقامة الرقمية للبيانات': 'fa-server',
+  'ميزة تقنية تراكمية من البحث والتطوير تضع العملاء على حدود ما هو ممكن': 'fa-lightbulb',
 };
 
 /** Drawn on for lines not in the map above, and to break any collision, so a
@@ -375,7 +411,7 @@ export const PillarPage = ({ pillarId }: { pillarId: PillarId }) => {
   const { t, lang } = useLang();
   useReveal();
   const pillar = PILLARS.find((p) => p.id === pillarId);
-  const content = PILLAR_CONTENT[pillarId]?.[lang];
+  const content = getPillarContent(pillarId, lang);
 
   useEffect(() => {
     if (pillar) document.title = `AWJ ${pillar.name}`;
