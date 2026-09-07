@@ -1697,8 +1697,11 @@ button, input, select, textarea { font-family: inherit; }
   z-index: 2;
 }
 .project-tile .pt-pillar { display: none; }
+/* `inset-inline-end`, not `right`: the partner text in .pt-meta flows from the
+   right under RTL, which is exactly where a physical `right` pinned the logo,
+   so the two printed on top of each other on every card. */
 .project-tile .pt-pillar-logo {
-  position: absolute; bottom: 32px; right: 20px;
+  position: absolute; bottom: 32px; inset-inline-end: 20px;
   height: 20px;
   width: auto;
   z-index: 2;
