@@ -5449,6 +5449,10 @@ a.pillar-contact-val:hover { color: var(--pillar-accent); }
 .contact-direct-label { font-family: var(--font-body); font-size: 20px; opacity: 0.9; }
 .contact-direct-phone { font-size: 22px; font-weight: 400; transition: opacity 0.2s ease; }
 .contact-direct-phone:hover { opacity: 0.7; }
+/* The anchor carries dir="ltr" so the number reads +968 first, but as a flex
+   item it stretches the full column width, which parked the digits on the left
+   while the label above them sat right. Align the text, not the direction. */
+[dir="rtl"] .contact-direct-phone { text-align: right; }
 .footer-phone {
   display: inline-block; margin-top: 18px; font-family: var(--font-body);
   font-size: 20px; font-weight: 500;
